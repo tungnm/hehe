@@ -1,5 +1,3 @@
-
-
 #include "glew.h"
 #include<iostream>
 #include <vector>
@@ -153,7 +151,6 @@ void init(void)
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CCW);
 	glEnable(GL_DEPTH_TEST);
-
 	//test map:
 	
 	renderer1->AddNormalMapOBJ("map1.obj","textures\\blue.jpg","textures\\white.jpg", cml::vector3f(mapCenter[0]+0.5,0.0,mapCenter[2]),cml::vector3f(1.0,1.0,1.0),0.0, false);
@@ -162,7 +159,6 @@ void init(void)
 	
 	for (int i=0;i<4;i++)
 		powerup[i]=true;
-	
 
 	//add powerup
 	renderer1->AddNormalMapOBJ("sphere.obj","textures\\wally.jpg","textures\\white.jpg", cml::vector3f(-4,0.5,3),cml::vector3f(1.0,1.0,1.0),0.0,true);
@@ -184,7 +180,7 @@ void init(void)
 	for(int i=0;i<4;i++)
 	{
 	//ghost[i].SetAppearance(renderer1->GetAppeance("ghost.obj","textures\\ghost.jpg","textures\\white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));
-	ghost[i].SetSpeed(20);	ghost[i].aitype=random;
+		ghost[i].SetSpeed(5);	ghost[i].aitype=random;
 	}
 
 	ghost[0].SetAppearance(renderer1->GetAppeance("ghost.obj","textures\\redghost.jpg","textures\\white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));

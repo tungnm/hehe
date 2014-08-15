@@ -6,7 +6,6 @@
 #include "RenderableObject.h"
 
 class Player
-
 {
 private:
 	Dir currentDirection;
@@ -17,7 +16,7 @@ private:
 
 	void UpdateAppearance();
 
-	
+		
 	int* keyPress;
 public:
 	cml::vector2i position;
@@ -32,5 +31,7 @@ public:
 	void Update(Map* m);
 	void SetSpeed(int s){speed=s;}
 	Dir GetOppositeDirection(Dir d);
+
+
 };
 #endif
