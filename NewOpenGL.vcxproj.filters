@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{6849d740-2718-4149-b9fb-fe58bb525b3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\Using">
+      <UniqueIdentifier>{1176d2b0-54a1-4c41-be93-285fc92cf262}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Pacman">
+      <UniqueIdentifier>{3cd88a4f-d57d-4db9-9444-0cf7e7492bbb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\glew.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\RenderableObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\UtilityFunctions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\FBO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TextureViewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Map.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Ghost.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\FBO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glxew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SOIL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextureViewer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\wglew.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RenderableObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ParticleSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\UtilityFunctions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Constant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pacman\Map.h">
+      <Filter>Header Files\Pacman</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pacman\Ghost.h">
+      <Filter>Header Files\Pacman</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pacman\Player.h">
+      <Filter>Header Files\Pacman</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUIElement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pacman\Guitable.h">
+      <Filter>Header Files\Pacman</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="shaders\skyBoxVert.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\quadVert.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\quadFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\waterVert.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\waterGBufferFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\extractFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\verticalBlurFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\horizontalBlurFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\ShadowVert.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\fireVert.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\defferedNormalSSAO.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\fireVertGFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\ShadowFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\skyBoxGFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\normalMapVert.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\normalMapGFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\instancedDrawingVert.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\instancedFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\TextVert.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+    <None Include="shaders\TextFrag.glsl">
+      <Filter>shaders\Using</Filter>
+    </None>
+  </ItemGroup>
+</Project>
