@@ -2,7 +2,7 @@
 #define PLAYER_H
 #include "glew.h"
 #include "cml\cml.h"
-
+#include "Renderer.h"
 #include "Appearance.h"
 typedef enum{dleft, dright, dup, ddown, upleft, upright, downleft, downright} Dir;
 class Player
@@ -26,6 +26,7 @@ public:
 	{
 		keyPress=keyBuffer;
 	}
+	void draw();
 	void InitializePos(int x,int y);
 	void SetAppearance(Appearance* a);
 	void Update();

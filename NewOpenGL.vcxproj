@@ -103,6 +103,7 @@
     <ClInclude Include="include\Constant.h" />
     <ClInclude Include="include\FBO.h" />
     <ClInclude Include="include\glew.h" />
+    <ClInclude Include="include\GlobalObjects.h" />
     <ClInclude Include="include\glxew.h" />
     <ClInclude Include="include\GUIElement.h" />
     <ClInclude Include="include\Input.h" />

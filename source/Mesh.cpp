@@ -19,7 +19,7 @@ bool from_string(T& t,
 
 void MeshManager::LoadObjFile( string fileName )
 {
-	if(_meshList.size()==0) cout<<"Loading Textures:\n";
+	if(_meshList.size()==0) cout<<"Loading Mesh:\n";
 	cout<<"* "<<fileName<<"\n";
 
 	string key=fileName;

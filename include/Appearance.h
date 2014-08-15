@@ -39,7 +39,6 @@ private:
 	MaterialInfo _material;
 	
 public:
-	bool visible;
 	//testing optimization
 	//use space to save calculation, only applied when both camera and object not moving
 	cml::matrix44f_c MV;

@@ -33,6 +33,12 @@ Dir Player::GetOppositeDirection(Dir d)
 	else if (d==dup) return ddown;
 	else if (d==ddown) return dup;
 }
+
+void Player::draw()
+{
+	//todo: ko hieu access singleton th'e nay co' du'ng kieu ko. buoi!
+	Renderer::GetInstance()->RenderNormalMapObject(myAppearance);
+}
 void Player::Update()
 {
 	bool canMove=true;

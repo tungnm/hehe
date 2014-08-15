@@ -259,7 +259,7 @@ void Map::SetCellMesh(string meshKey, string diffTex, string normTex, cml::vecto
 			if(bitArray[i][j]==true)
 			{
 				cml::vector3f pos=cml::vector3f(-i*cellHeight-cellHeight/2.0, 0.0, j*cellWidth+cellWidth/2.0);
-				r1->AddNormalMapOBJ( meshKey,  diffTex,  normTex,pos, scale,  rot, true);
+//				r1->AddNormalMapOBJ( meshKey,  diffTex,  normTex,pos, scale,  rot, true);
 			}
 		}
 }

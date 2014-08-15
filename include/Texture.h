@@ -30,7 +30,7 @@ public:
 	void ShutDown();
 	//Interface to load textures to GPU memory
 	void LoadCubeMap(string forward,string backward,string top, string bottom, string right, string left);
-	void LoadSingleImage(char* fileName);
+	void LoadSingleImage(string fileName);
 	
 	int GetTextureID(string textureName);//return the integer id of the texture, given it name such as "fire1.jpg"
 

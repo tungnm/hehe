@@ -64,24 +64,24 @@ int TextureManager::GetTextureID(string textureName)
 	}
 
 	
-	void TextureManager::LoadSingleImage(char* filePath)
+	void TextureManager::LoadSingleImage(string filePath)
 	{	
-		
+		if(_count==0)
+			cout<<"Loading Textures:\n";
+		cout<<"* "<< filePath <<"\n";
 		string key=filePath;
-		if (Utility::CheckFileExist(key)==false)
+		filePath = "textures\\" + filePath;
+		if (Utility::CheckFileExist(filePath)==false)
 			return;
 
 		int textureID=_count+1;
 		_count++;
-		//todo: check if filePath exist
 	
 		glActiveTexture(GL_TEXTURE0+textureID);
-		if(_count==0)
-			cout<<"Loading Textures:\n";
-		cout<<"* "<<filePath<<"\n";
+		
 		GLuint textureHandles = SOIL_load_OGL_texture
 			(
-			filePath,
+			filePath.c_str(),
 			SOIL_LOAD_AUTO,
 			SOIL_CREATE_NEW_ID,
 			SOIL_FLAG_INVERT_Y
@@ -89,7 +89,7 @@ int TextureManager::GetTextureID(string textureName)
 
 		//if(texture[0] == 0)
 		//return false;
-		if (textureHandles<=0) cout<<"--Error: can't load "<<filePath<<"\n";else
+		if (textureHandles<=0) cout<<"--Error: can't load "<<filePath.c_str()<<"\n";else
 			cout<<"Done\n";
 		// Typical Texture Generation Using Data From The Bitmap
 		glBindTexture(GL_TEXTURE_2D, textureHandles);

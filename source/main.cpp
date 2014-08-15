@@ -12,19 +12,8 @@
 #include "Pacman\Player.h"
 #include "UtilityFunctions.h"
 #include <unordered_map>
+#include "GlobalObjects.h"
 
-Renderer * renderer1;
-
-
-long lastTick=0;
-long lastFunctionClick=0;
-string objective;
-void ShowVictory()
-{
-
-
-}
-bool powerup[4];
 
 void Close()
 {
@@ -56,14 +45,14 @@ void UpdateKeyboard()
 	}
 
 	 if (keysPressed['c'])//&&current-lastFunctionClick>700)
-	{renderer1->lightPos[1]+=0.9f;
+	{//renderer1->lightPos[1]+=0.9f;
 	
 		/*renderer1->ToggleSSAO();
 		lastFunctionClick=current;*/
 	}
 	  if (keysPressed['b'])//&&current-lastFunctionClick>700)
 	{
-		renderer1->lightPos[1]-=0.9f;
+	//	renderer1->lightPos[1]-=0.9f;
 		
 		/*renderer1->ToggleBloom();
 		lastFunctionClick=current;*/
@@ -82,7 +71,7 @@ void UpdateKeyboard()
 
 	lastTick=current;
 }
-Player player1;
+
 
 void init(void)
 {	
@@ -91,75 +80,51 @@ void init(void)
 	//initialize render
 	renderer1=Renderer::GetInstance();
 
-	renderer1->SetCameraPosition(cml::vector3f(6.0,16.0,0.0), cml::vector3f(0.0,0.5,0.0));
-
+	//Setup renderer
 	renderer1->StartUp();
+	renderer1->SetCameraPosition(cml::vector3f(6.0,16.0,0.0), cml::vector3f(0.0,0.5,0.0));
 	renderer1->SetLightTarget(0.0,0.5,0.0);
 	renderer1->setLightPos(-5.0, 5.0,0.0);
-	//renderer1->AddSolidColorOBJ("map1.obj",cml::vector3f(0.0,0.0,0.8), cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0);
-	//renderer1->AddNormalMapOBJ("map1.obj","textures\\blue.jpg","textures\\white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0, false);
-	/*
-	renderer1->LoadTexture("textures\\blueghost.jpg");
-	renderer1->LoadMesh("eye.obj");
-	*/
-
 	//renderer1->AddText("score","Score",cml::vector2f(0.60,0.75),0.03f,0.01f);
 	//renderer1->AddText("lives","Lives",cml::vector2f(0.60,0.65),0.03f,0.01f);
 	//renderer1->AddText("goal","no", cml::vector2f(0.0,0.0), 0.1,0.0);
 	//renderer1->HideText("goal");
 
+	//set up game objects
 	//player:
-	player1.SetAppearance(renderer1->GetAppeance("pacman.obj","textures\\pacman.png","textures\\white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));
-	renderer1->GetAppeance("box.obj","textures\\blue.jpg","textures\\white.jpg", cml::vector3f(2.0,0.0,3.0),cml::vector3f(0.2,0.3,0.1),0.01);
-renderer1->GetAppeance("box.obj","textures\\red.jpg","textures\\white.jpg", cml::vector3f(2.0,3.0,3.0),cml::vector3f(0.05,0.05,0.05),0.01);
+	player1.SetAppearance(renderer1->GetAppeance("pacman.obj","pacman.png","white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));
+	//todo: 2 cai' boxes nay chi la appearance, ve sau no' se nam trong monster class, hay gi do...
+	box1 = renderer1->GetAppeance("box.obj","blue.jpg","white.jpg", cml::vector3f(2.0,0.0,3.0),cml::vector3f(0.2,0.3,0.1),0.01);
+	box2 = renderer1->GetAppeance("box.obj","red.jpg","white.jpg", cml::vector3f(2.0,3.0,3.0),cml::vector3f(0.05,0.05,0.05),0.01);
 
-	player1.SetSpeed(20);
-
+	//deo hieu ca'i nay de lam gi, cha'c xem sau
 	player1.SetKeyBuffer(keysPressed);
-
 }
-//free resource
-int pauseTimer;
-bool isPause;
-int lasttick;
+
 void display()
 {
 	int elapsedTime=glutGet(GLUT_ELAPSED_TIME);
 
-	renderer1->Display(elapsedTime,0);
+	renderer1->BeginRendering();
+	
+	//todo: cho het nhung ca'i draw() nay vao trong scene->draw(), hay gi do'...
+	player1.draw();
+	//todo: day chi la 2 ca'i test boxes, ve sau no' se thuoc vao` monster.draw()
+	renderer1->RenderNormalMapObject(box1);
+	renderer1->RenderNormalMapObject(box2);
+
+
+	renderer1->EndRendering();
 	glutSwapBuffers();
 	
 
 }
 
-void SetPause()
-{
-	isPause=true;
-	pauseTimer=3000;
-}
-
 void Update(int value)
 {
-	/*int elapsedTime=glutGet(GLUT_ELAPSED_TIME);
-
-	int timelapse=elapsedTime-lasttick;
-	lasttick=elapsedTime;
-	
-	if(isPause)
-		{
-			pauseTimer-=timelapse;
-		if(pauseTimer<=0)
-		{	isPause=false;	ResetPosition();	glutTimerFunc(15, Update, 0);return;}
-			glutTimerFunc(15, Update, 0);
-		return;
 		
-	}
-	*/
-	
 	UpdateKeyboard();
-//	renderer1->Update(elapsedTime);
-
-
+	
 	if(keysPressed['a']>0)
 	keysPressed['a']--;
 	else if(keysPressed['d']>0)

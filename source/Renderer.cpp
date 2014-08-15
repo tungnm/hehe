@@ -335,10 +335,10 @@ void Renderer::InitStaticUniforms()
 
 	//	BuildGBufferWater.Activate();
 	//	BuildGBufferWater.SendIntToUni("CubeMapTex",textureMan->GetCubeMapID());
-	LoadTexture("textures\\letters.png");
+	LoadTexture("letters.png");
 	
 	TextShader.Activate();
-	TextShader.SendIntToUni("tex1",textureMan->GetTextureID("textures\\letters.png") );
+	TextShader.SendIntToUni("tex1",textureMan->GetTextureID("letters.png") );
 	diffuseTexturePass.Activate();
 
 	diffuseTexturePass.SendVec3ToUni("lightPos",3.0,6.0,3.0);
@@ -352,8 +352,8 @@ void Renderer::InitStaticUniforms()
 	ProcessGBufferPass.SendIntToUni("gNormalMapTex",gbuffer1.GetGNormalMapTexHandle());
 	ProcessGBufferPass.SendMat4ToUni("camProj",&_projection);
 	ProcessGBufferPass.SendIntToUni("shadowMap",shadowFBO1.GetTextureHandle());
-	LoadTexture("textures\\random_normals.png");
-	ProcessGBufferPass.SendIntToUni("rnm",textureMan->GetTextureID("textures\\random_normals.png"));
+	LoadTexture("random_normals.png");
+	ProcessGBufferPass.SendIntToUni("rnm",textureMan->GetTextureID("random_normals.png"));
 
 
 	TextureViewer temp;
@@ -403,29 +403,9 @@ Appearance* Renderer::GetAppeance(string meshKey, string diffTex, string normTex
 	newOBJ->SetScale(scale[0],scale[1],scale[2]);
 	newOBJ->Translate(pos[0],pos[1],pos[2]);
 	newOBJ->Rotate(rot);
-	newOBJ->visible=true;
 	return newOBJ;
 }
 
-
-void Renderer::AddNormalMapOBJ(string meshKey, string diffTex, string normTex, cml::vector3f pos, cml::vector3f scale, GLfloat rot, bool nonMoving)
-{
-	LoadMesh(meshKey);
-	LoadTexture(diffTex);
-	LoadTexture(normTex);
-
-	_normalMapList.push_back(new Appearance(meshKey));
-
-	_normalMapList[_normalMapList.size()-1]->SetTexture(MapType::diffuse,diffTex);
-	_normalMapList[_normalMapList.size()-1]->SetTexture(MapType::normal,normTex);
-
-	_normalMapList[_normalMapList.size()-1]->SetScale(scale[0],scale[1],scale[2]);
-	_normalMapList[_normalMapList.size()-1]->Translate(pos[0],pos[1],pos[2]);
-	_normalMapList[_normalMapList.size()-1]->Rotate(rot);
-	_normalMapList[_normalMapList.size()-1]->visible=true;
-	if(nonMoving)
-		_normalMapList[_normalMapList.size()-1]->SetNonMoving(_projection, _cameraSetup);
-}
 
 void Renderer::AddSolidColorOBJ(string meshKey,cml::vector3f color,cml::vector3f pos, cml::vector3f scale, GLfloat rot)
 {
@@ -555,71 +535,62 @@ void Renderer::Update(int elapsed)
 
 	lastUpdateTick=currentTick;
 }
-void Renderer::Display(int elapsed, int nCorns)
-{
 
+void Renderer::BeginRendering()
+{
 	//render scene from light point of view and store depth buffer in ShadowFBO, will be later used for shadow mapping
 	BuildShadowMap(&shadowFBO1);
 
 	//Build the G buffer, it will store data to be later retrieve for lighting calculation and all other effect
 	gbuffer1.SetActive();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-
 	//now render all normal map object in the scene
 	BuildGBufferNormalMap.Activate();
 	//glEnable(GL_DEPTH_TEST);
-	for(int i=0;i<_normalMapList.size();i++)
-	{	
-		if(_normalMapList[i]->visible==false)
-			continue;
+}
+
+void Renderer::RenderNormalMapObject(Appearance* appearance)
+{
 		static string lastTextureID="";
 		static string lastNormalMapTexID="";
 		//Render all objects with BuildGBuffer shader, writing vertex data to G-Buffer FBO
-		//	if(_normalMapList[i]->isNonMoving==false)
+		//	if(appearance->isNonMoving==false)
 		//update current modelView, ModelViewProjection matrix based on the model matrix of the object
 		//	{
-		UpdateMatrices(_normalMapList[i]->GetModelMatrix());
+		UpdateMatrices(appearance->GetModelMatrix());
 		//send these matrices to shader uniforms
 		BuildGBufferNormalMap.SendViewSpaceTransformtoUni(&_MV, &_modelViewProj, &_normalTransform);
 		//	}
 		//	else //optimization: use the matrices stored inside nonMoving appearance
-		//	BuildGBufferNormalMap.SendViewSpaceTransformtoUni(&_normalMapList[i]->MV, &_normalMapList[i]->MVP, &_normalMapList[i]->normalTrans);
-
-
-
+		//	BuildGBufferNormalMap.SendViewSpaceTransformtoUni(&appearance->MV, &appearance->MVP, &appearance->normalTrans);
 
 		//update the texture sampler for texture of current object
-		string texID=_normalMapList[i]->GetDiffuseMap();
+		string texID=appearance->GetDiffuseMap();
 		if(lastTextureID!=texID)
 		{
 			BuildGBufferNormalMap.SendIntToUni("tex1",textureMan->GetTextureID(texID));
 			lastTextureID=texID;
 		}
-		string normalMapTexID=_normalMapList[i]->GetNormalMap();
+		string normalMapTexID=appearance->GetNormalMap();
 		if(lastNormalMapTexID!=normalMapTexID)
 		{
 			BuildGBufferNormalMap.SendIntToUni("normalMap",textureMan->GetTextureID(normalMapTexID));
 			lastNormalMapTexID=normalMapTexID;
 		}
 		//render the object
-		RenderObj(_normalMapList[i]);
-	}
-
+		RenderObj(appearance);
+}
+void Renderer::EndRendering()
+{
 		FBO::SetDefault(W_WIDTH,W_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 		//	RenderTextureToQuad(gbuffer1.GetGNormTexHandle());
 		/*RenderTextureToQuad(shadowFBO1.GetNormalHandle(),QuadPosition::lowerLeft);
 		RenderTextureToQuad(shadowFBO1.GetAlbedoandle(),QuadPosition::lowerRight);*/
 
 		//RenderTextureToQuad( textureMan->GetTextureID("textures\\letters.png"));
-
-
-			ProcessGBuffer();
-	
+		ProcessGBuffer();	
 }
 
 void Renderer::AddText(string id, string text, cml::vector2f position, GLfloat scale, GLfloat condensed)

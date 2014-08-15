@@ -123,6 +123,24 @@ void UnloadShaders();
 void UpdateLightMatrix();
 //load the mesh, texture requried such as box.obj for cubemap, random.png for SSAO..
 void LoadEngineResource();
+MeshManager *meshMan;
+	//light: right now renderer only support 1 single point light
+cml::vector4f lightPos;
+	void RemoveObject(int index)
+	{
+	//	_normalMapList[index]->visible=false;
+
+	//	delete _normalMapList[index];
+//		_normalMapList.erase(_normalMapList.begin()+index);
+	}
+	//cai' nay dang broken, move vao private
+	void AddSolidColorOBJ(string meshKey,cml::vector3f color,cml::vector3f pos, cml::vector3f scale, GLfloat rot);
+
+	//for removing
+	int GetNObjects()
+	{
+		return _normalMapList.size();
+	}
 public:
 	cml::matrix44f_c GetCameraSetup(){return _cameraSetup;}
 	cml::matrix44f_c GetProjection(){return _projection;}
@@ -135,38 +153,47 @@ public:
 
 	}
 	void SetLightTarget(GLfloat x,GLfloat y,GLfloat z);
-MeshManager *meshMan;
-void setLightPos(GLfloat x, GLfloat y, GLfloat z);
+
+	void setLightPos(GLfloat x, GLfloat y, GLfloat z);
 
 	void StartUp();
 	void ShutDown();
-	//light: right now renderer only support 1 single point light
-cml::vector4f lightPos;
+
 	void LoadTexture(string textureFileName);
 	void LoadMesh(string meshKey);
-	void AddNormalMapOBJ(string meshKey, string diffTex, string normTex, cml::vector3f pos, cml::vector3f scale, GLfloat rot, bool nonMoving);
+
+	/**
+	 * This function will load the mesh, textures and create and return the appearance object
+	 * @param meshKey fileName of the obj file, located inside textures/
+	 * @param diffTex diffuse texture file, located inside textures/
+	 * @param normTex normal map texture file
+	 * @param pos position vector
+	 * @param scale scale vector
+	 * @param rot rotation in degree(I think ,maybe radian, deo' hieu?)
+	 */
 	Appearance* GetAppeance(string meshKey, string diffTex, string normTex, cml::vector3f pos, cml::vector3f scale, GLfloat rot);
-	
+
+	/**
+	 * this need to becall before any call to render normalMapObject get called
+	 */
+	void BeginRendering();
+	/**
+	 * Each object that want to render its Appearance should call this function after
+	 * BeginRendering and before EndRendering
+	 */
+	void RenderNormalMapObject(Appearance* appearance);
+	/**
+	 * Should be called after all the scene objects have rendered themsefve
+	 */
+	void EndRendering();
+
 	void AddText(string id, string text, cml::vector2f position, GLfloat scale, GLfloat condense);
 	void ChangeTex(string id, string newText);
-
-	void AddSolidColorOBJ(string meshKey,cml::vector3f color,cml::vector3f pos, cml::vector3f scale, GLfloat rot);
 	void LoadCubemap(string forward,string backward,string top, string bottom, string right, string left);
-	
-	//Camera control interfaces
-	
-	//for removing
-	int GetNObjects()
-	{
-		return _normalMapList.size();
-	}
-	void RemoveObject(int index)
-	{
-		_normalMapList[index]->visible=false;
 
-	//	delete _normalMapList[index];
-//		_normalMapList.erase(_normalMapList.begin()+index);
-	}
+	//Camera control interfaces
+
+
 	void ShowText(string key);
 	void HideText(string key);
 
@@ -178,7 +205,6 @@ cml::vector4f lightPos;
 	void OrientCameraWithMousePos(int xDisplacement, int yDisplacement);
 	void ToggleSSAO();
 	void ToggleBloom();
-	void Display(int elapsed,int ncorn);
 	void GoraudRender();
 	void Update(int elapsed);
 	void SetupWeight(int kernelSize, GLfloat sigma2 );
