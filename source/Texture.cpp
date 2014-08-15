@@ -8,7 +8,6 @@
 
 using namespace std;
 
-
 void TextureManager::StartUp()
 {
 	_count=0;

@@ -5,6 +5,7 @@
 #include <unordered_map>
 
 using namespace std;
+
 class TextureManager
 {
 	//Todo: right now texture object will not supposed to change in runtime, such as loading another image or texture object point to another c

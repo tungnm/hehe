@@ -44,6 +44,7 @@ void BuildAlphabetHashMap()
 	cml::matrix_set_translation(_lightModel,lightPos[0],lightPos[1],lightPos[2]);
 
 	}
+
 void Renderer::InitLightMatrix()
 {
 	_lightProj.identity();
@@ -82,7 +83,17 @@ void Renderer::UpdateCamera()
 {
 	cml::matrix_look_at_RH(_cameraSetup,_cameraPosition[0],_cameraPosition[1],_cameraPosition[2],_cameraPosition[0]+_cameraDirection[0],_cameraPosition[1]+_cameraDirection[1],_cameraPosition[2]+_cameraDirection[2],0.0f,1.0f,0.0f);
 }
+void Renderer::SetLightTarget(GLfloat x,GLfloat y,GLfloat z)
+{
+	lightTarget.set(x,y,z);
+	UpdateLightMatrix();
+}
 
+void Renderer::setLightPos(GLfloat x,GLfloat y,GLfloat z)
+{
+	lightPos.set(x,y,z,1.0);
+	UpdateLightMatrix();
+}
 
 void Renderer::StartUp()
 {
@@ -120,6 +131,11 @@ void Renderer::StartUp()
 	/*glEnable(GL_BLEND);
 	glBlendEquation(GL_FUNC_ADD);
 	glBlendFunc (GL_ONE, GL_ONE);*/
+
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+	glEnable(GL_DEPTH_TEST);
 }
 
 GLfloat gauss(float x, float sigma2 )
@@ -208,9 +224,9 @@ void Renderer::LoadTexture(string textureKey)
 void Renderer::LoadMesh(string meshKey)
 {
 	//check if mesh is already there, if so dont have to load
-	if(!meshMan->ExistMesh(meshKey))
+	if(!meshMan->IsMeshExist(meshKey))
 	{
-		meshMan->Load(meshKey);
+		meshMan->LoadObjFile(meshKey);
 
 	}
 }
@@ -224,7 +240,7 @@ void Renderer::RenderSkyBox()
 
 	//code to draw skybox
 	glFrontFace(GL_CW);
-	MeshInfo mesh=meshMan->GetMeshInfo("box.obj");
+	MeshRenderData mesh=meshMan->GetMeshRenderData("box.obj");
 	// bind VAO
 	glBindVertexArray(mesh.VAOHandle);
 	// draw
@@ -281,7 +297,7 @@ void Renderer::LoadLetterMesh()
 	{
 		getline (myfile, line);
 
-		meshMan->Load(line);
+		meshMan->LoadObjFile(line);
 	}
 	myfile.close();
 }
@@ -291,8 +307,8 @@ void Renderer::LoadEngineResource()
 
 	//	LoadTexture("textures\\random_normals.png");
 	//deferredSecondPass.SendIntToUni("randomTex",_textureList["noise"]->GetID());
-	meshMan->Load("quad.obj");
-	meshMan->Load("box.obj");
+	meshMan->LoadObjFile("quad.obj");
+	meshMan->LoadObjFile("box.obj");
 	//	meshMan->Load("particle2.obj");
 	//LoadCubemap("textures\\stormy\\tforward.png","textures\\stormy\\tbackward.png","textures\\stormy\\tup.png","textures\\stormy\\tdown.png","textures\\stormy\\tright.png","textures\\stormy\\tleft.png");
 	//LoadCubemap("textures\\nightsky\\nightsky_west.bmp","textures\\nightsky\\nightsky_east.bmp","textures\\nightsky\\nightsky_up.bmp","textures\\nightsky\\nightsky_down.bmp","textures\\nightsky\\nightsky_south.bmp","textures\\nightsky\\nightsky_north.bmp");
@@ -424,7 +440,7 @@ void Renderer::AddSolidColorOBJ(string meshKey,cml::vector3f color,cml::vector3f
 void Renderer::RenderObj(Appearance* a)
 {	
 
-	MeshInfo*mesh=&(meshMan->GetMeshInfo(a->meshKey));
+	MeshRenderData*mesh=&(meshMan->GetMeshRenderData(a->meshKey));
 	//	if(mesh->VAOHandle!=lastVaoHandle)
 	//	{
 	//draw the mesh:
@@ -507,18 +523,18 @@ void Renderer::BuildShadowMap(ShadowFBO* shadowFbo)
 	buildShadowMap.Activate(); 
 
 	glCullFace(GL_FRONT);
-	for(int i=0;i<_normalMapList.size();i++)
-	{
-		if(_normalMapList[i]->visible==false) continue;
+	//for(int i=0;i<_normalMapList.size();i++)
+	//{
+	//	if(_normalMapList[i]->visible==false) continue;
 
-		//Render all objects with Build shadow map shader( in this case only need to pass the MVP to light space for that object)
-		cml::matrix44f_c MVPL;
-		MVPL.identity();
-		MVPL=_lightProj*_lightView*_normalMapList[i]->GetModelMatrix();
-		buildShadowMap.SendMat4ToUni("MVPLight",&MVPL);
-		RenderObj(_normalMapList[i]);
+	//	//Render all objects with Build shadow map shader( in this case only need to pass the MVP to light space for that object)
+	//	cml::matrix44f_c MVPL;
+	//	MVPL.identity();
+	//	MVPL=_lightProj*_lightView*_normalMapList[i]->GetModelMatrix();
+	//	buildShadowMap.SendMat4ToUni("MVPLight",&MVPL);
+	//	RenderObj(_normalMapList[i]);
 
-	}
+	//}
 	glCullFace(GL_BACK);
 
 }
@@ -549,84 +565,6 @@ void Renderer::Display(int elapsed, int nCorns)
 	gbuffer1.SetActive();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//Render the skybox: note thats this is deferred shading pipeline so skybox vert and frag shader will act like a normal
-	//G-buffer builder, and output the skyebox to G-buffer as well. Read the skyBoxVert and skyBoxFrag for more information
-	//	RenderSkyBox();
-
-
-
-	//===================================render fire to G-buffer, disable depthest for maximum blending of particles:
-	//glEnable(GL_BLEND);
-	////test render particle system:
-	//BuildGBufferFire.Activate();
-	////Note that I used glDepthFunc(GL_ALWAYS); so that depth test are always passed but depth value are still be updated in the depth
-	////buffer. By doing this with the particles, I am able to draw all of them(without any fails the depth test), so that blending 
-	////will work and still be able to update the depth buffer for later checking with any fragment that are not from fire particle, such
-	////as normal object with normal map...
-	//glDepthFunc(GL_ALWAYS);
-
-	//for(int j=0;j<fire1->nParticles;j++)
-	//{
-	//	Particle* current=&fire1->particleList[j];
-	//	cml::matrix44f_c MV;
-	//	MV=_cameraSetup*(current->GetModelMatrix());
-	//	_modelViewProj=_projection*MV;
-	//	BuildGBufferFire.SendMat4ToUni("MVP",&_modelViewProj);
-	//	BuildGBufferFire.SendMat4ToUni("M",&current->GetModelMatrix());
-	//	//particleOrigin
-	//	//send in the screen space pos of the particle center position:
-	//	cml::vector4f originScreenSpacePos=_modelViewProj*cml::vector4f( 0, 0, 0,1.0);
-	//	originScreenSpacePos/=originScreenSpacePos[3];
-	//	cml::vector3f sd=cml::vector3f(0.5*originScreenSpacePos[0]+0.5, 0.5*originScreenSpacePos[1]+0.5, 0.5*originScreenSpacePos[2]+0.5);
-
-	//	//calculate radius to 1 vertex:
-	//	//the vector3 ( 0.0, 0.462, 0.0 is actually a hardcoded data of 1 vertex inside particle2.obj
-	//	//so when we transform this vertex to screen space, and subtract it to the center screenspace position calculated above,
-	//	//we will get the radius
-	//	cml::vector4f vertexScreenSpace=_modelViewProj*cml::vector4f( 0.0, 0.462, 0.0,1.0);
-	//	vertexScreenSpace/=vertexScreenSpace[3];
-	//	cml::vector3f sd1=cml::vector3f(0.5*vertexScreenSpace[0]+0.5, 0.5*vertexScreenSpace[1]+0.5, 0.5*vertexScreenSpace[2]+0.5);
-	//	cml::vector3f sub= sd1-sd;
-	//	float radius = sub.length();
-
-
-	//	BuildGBufferFire.SendVec3ToUni("particleOrigin",sd);
-	//	BuildGBufferFire.SendFloatToUni("radius",radius);
-
-	//	BuildGBufferFire.SendFloatToUni("textureYOffset",textureOffset);
-	//	BuildGBufferFire.SendFloatToUni("textureXOffset",current->randomXOffset);
-	//	//transparency fade with life decrease:
-	//	BuildGBufferFire.SendFloatToUni("transparency",current->lifetime/current->maxLife);
-	//	MeshInfo particleMesh=meshMan->GetMeshInfo("particle2.obj");
-
-	//	glBindVertexArray(particleMesh.VAOHandle);
-	//	// draw
-	//	glDrawElements(GL_TRIANGLES,particleMesh.nFaces*3,GL_UNSIGNED_INT,0);
-	//}
-	////after rendering all particle, revert back to normal depth test
-	//glDepthFunc(GL_LESS);
-
-	//glDisable(GL_BLEND);
-	//=============================END RENDER FIRE================================
-
-
-	////render water:
-	//BuildGBufferWater.Activate();
-	//BuildGBufferWater.SendFloatToUni("time",elapsed );
-	//UpdateMatrices(waterModel.GetModelMatrix());
-	////send these matrices to shader uniforms
-	//BuildGBufferWater.SendViewSpaceTransformtoUni(&_MV, &_modelViewProj, &_normalTransform);
-	//BuildGBufferWater.SendVec3ToUni("camPos",_cameraPosition[0],_cameraPosition[1],_cameraPosition[2]);
-	////send transform to worldspace matrices that are used to calculate the reflected vector:
-	//cml::matrix_linear_transform(_normalTransform,waterModel.GetModelMatrix());//this function extract the top left 3-3 matrix from _cameraSetup to _normalTransform
-	//_normalTransform.inverse();
-	//_normalTransform.transpose();
-	//BuildGBufferWater.SendMat4ToUni("M",&waterModel.GetModelMatrix());//pass in model matrix to transform to
-	//BuildGBufferWater.SendMat3ToUni("normalTransformToWorld",&_normalTransform);//transformation of normal to 
-
-
-	////render the object
-	//RenderObj(&waterModel);
 
 
 	//now render all normal map object in the scene
@@ -669,20 +607,6 @@ void Renderer::Display(int elapsed, int nCorns)
 		RenderObj(_normalMapList[i]);
 	}
 
-	//test instance rendering:
-	instancedVert.Activate();
-
-	MeshInfo*mesh=&(meshMan->GetMeshInfo("particleHalf.obj"));
-	glBindVertexArray(mesh->VAOHandle);
-	glDrawElementsInstanced(GL_TRIANGLES,mesh->nFaces*3,GL_UNSIGNED_INT,0,nCorns);
-
-
-
-
-	//SECOND PASS: PROCES G-BUFFER BY DRAWING A FULL SCREEN QUAD AND HAVE ALL THE PROCESSING IN THE FRAGMENT SHADER
-	//Switch back to default FBO or use bloom if enabled
-	if(isBloom==false)
-	{
 		FBO::SetDefault(W_WIDTH,W_HEIGHT);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -695,43 +619,6 @@ void Renderer::Display(int elapsed, int nCorns)
 
 
 			ProcessGBuffer();
-	}
-	else
-	{
-		//BLOOM RENDER:
-		_fboList["ssaoOutput"]->SetActive();
-		RenderGUITexts();
-		ProcessGBuffer();
-
-		//now extract the highlight:
-
-		_fboList["extractedHightLight"]->SetActive();
-
-		brightExtractionPass.Activate();
-		brightExtractionPass.SendMat4ToUni("MV",_textureViewList["fullScreen"]->GetModelMatrix());
-		RenderOnScreenQuad();
-
-
-		//first blur pass:
-		_fboList["firstBlur"]->SetActive();
-
-		verticalBlurPass.Activate();//normal texture shader, will draw texture as origin
-		verticalBlurPass.SendMat4ToUni("MV",_textureViewList["fullScreen"]->GetModelMatrix());
-		RenderOnScreenQuad();
-
-		//secondblur and add with the ssaoOutput:
-		FBO::SetDefault(W_WIDTH,W_HEIGHT);
-
-		horizontalBlurPass.Activate();//normal texture shader, will draw texture as origin
-		horizontalBlurPass.SendMat4ToUni("MV",_textureViewList["fullScreen"]->GetModelMatrix());
-
-		//render with textureViewer
-		
-		RenderOnScreenQuad();
-		
-
-	}
-
 	
 }
 
@@ -800,7 +687,7 @@ void Renderer::RenderTextureToQuad(int textureHandle)
 
 void Renderer::RenderOnScreenQuad()
 {
-	MeshInfo mesh=meshMan->GetMeshInfo("quad.obj");
+	MeshRenderData mesh=meshMan->GetMeshRenderData("quad.obj");
 	glBindVertexArray(mesh.VAOHandle);
 	glDrawElements(GL_TRIANGLES,mesh.nFaces*3,GL_UNSIGNED_INT,0);
 

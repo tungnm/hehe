@@ -3,7 +3,7 @@
 #include "glew.h"
 #include "cml\cml.h"
 #include <string>
-#include "RenderableObject.h"
+#include "Appearance.h"
 #include "Renderer.h"
 #include <vector>
 #include <unordered_set>

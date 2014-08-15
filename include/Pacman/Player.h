@@ -2,9 +2,9 @@
 #define PLAYER_H
 #include "glew.h"
 #include "cml\cml.h"
-#include "Map.h"
-#include "RenderableObject.h"
 
+#include "Appearance.h"
+typedef enum{dleft, dright, dup, ddown, upleft, upright, downleft, downright} Dir;
 class Player
 {
 private:
@@ -28,7 +28,7 @@ public:
 	}
 	void InitializePos(int x,int y);
 	void SetAppearance(Appearance* a);
-	void Update(Map* m);
+	void Update();
 	void SetSpeed(int s){speed=s;}
 	Dir GetOppositeDirection(Dir d);
 

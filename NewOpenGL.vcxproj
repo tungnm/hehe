@@ -95,7 +95,7 @@
     <ClCompile Include="source\Renderer.cpp" />
     <ClCompile Include="source\Shader.cpp" />
     <ClCompile Include="source\Texture.cpp" />
-    <ClCompile Include="source\RenderableObject.cpp" />
+    <ClCompile Include="source\Appearance.cpp" />
     <ClCompile Include="source\TextureViewer.cpp" />
     <ClCompile Include="source\UtilityFunctions.cpp" />
   </ItemGroup>
@@ -117,7 +117,7 @@
     <ClInclude Include="include\SOIL.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\TextureViewer.h" />
-    <ClInclude Include="include\RenderableObject.h" />
+    <ClInclude Include="include\Appearance.h" />
     <ClInclude Include="include\UtilityFunctions.h" />
     <ClInclude Include="include\wglew.h" />
   </ItemGroup>

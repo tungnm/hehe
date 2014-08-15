@@ -3,6 +3,7 @@
 #include "UtilityFunctions.h"
 
 using namespace std;
+
 //this template function is how to convert a string into any numeric type:
 Assimp::Importer importer;
 
@@ -15,19 +16,8 @@ bool from_string(T& t,
 	return !(iss >> f >> t).fail();
 }
 
-//void MeshManager::Delete()
-//{
-//	//delete 2 vbos:
-//	GLuint vbos[2];
-//	//vbos[0]=vertexDataHandle;
-////	vbos[1]=textureHandle;
-//	glDeleteBuffers(2,vbos);
-//	GLuint vao[1]; vao[0]=VAOHandle;
-//	glDeleteVertexArrays(1,vao);
-//}
 
-
-void MeshManager::Load( string fileName )
+void MeshManager::LoadObjFile( string fileName )
 {
 	if(_meshList.size()==0) cout<<"Loading Textures:\n";
 	cout<<"* "<<fileName<<"\n";
@@ -39,7 +29,7 @@ void MeshManager::Load( string fileName )
 	if(Utility::CheckFileExist(fileName)==false)
 		return ;
 
-	MeshInfo newMesh; //the mesh info to be added
+	MeshRenderData newMesh; //the mesh info to be added
 
 
 	const struct aiScene* scene=importer.ReadFile(fileName, aiProcessPreset_TargetRealtime_Quality );
@@ -111,9 +101,9 @@ void MeshManager::Load( string fileName )
 	return;
 }
 
-MeshInfo MeshManager::UploadVertexData(aiVector3D * position,aiVector3D *normal,GLfloat * texture,GLfloat * tangent,unsigned int * indice,unsigned int nVerts,unsigned int nFaces)
+MeshRenderData MeshManager::UploadVertexData(aiVector3D * position,aiVector3D *normal,GLfloat * texture,GLfloat * tangent,unsigned int * indice,unsigned int nVerts,unsigned int nFaces)
 {
-	MeshInfo result;
+	MeshRenderData result;
 	
 	// push data to GPU
 	GLuint arrayHandle[1];
@@ -121,7 +111,7 @@ MeshInfo MeshManager::UploadVertexData(aiVector3D * position,aiVector3D *normal,
 
 	result.VAOHandle=arrayHandle[0];
 
-	MeshInfo error;
+	MeshRenderData error;
 	error.VAOHandle=-1;
 	error.nFaces=0;
 	if(result.VAOHandle<=0) {cout<<"Error, cannot generate VAO\n";return error;}
@@ -174,7 +164,7 @@ MeshInfo MeshManager::UploadVertexData(aiVector3D * position,aiVector3D *normal,
 	return result;
 }
 
-bool MeshManager::ExistMesh(string meshFileName)
+bool MeshManager::IsMeshExist(string meshFileName)
 	{
 		if(_meshList.count(meshFileName)<1)
 			return false;
@@ -192,16 +182,16 @@ void MeshManager::StartUp()
 void MeshManager::ShutDown()
 {
 	cout<<"Mesh Manager is shuting down...";
-	for(std::unordered_map<string, MeshInfo>::iterator iter =  _meshList.begin(); iter != _meshList.end(); ++iter)
+	for(std::unordered_map<string, MeshRenderData>::iterator iter =  _meshList.begin(); iter != _meshList.end(); ++iter)
 	{
-	 MeshInfo current=iter->second;
-	 glDeleteBuffers(1, &current.indiceHandle);
-	 glDeleteBuffers(1, &current.normVBOHandle);
-	 glDeleteBuffers(1, &current.posVBOHandle);
-	 glDeleteBuffers(1, &current.tanVBOHandle);
-	 glDeleteBuffers(1, &current.texVBOHandle);
+		MeshRenderData current=iter->second;
+		glDeleteBuffers(1, &current.indiceHandle);
+		glDeleteBuffers(1, &current.normVBOHandle);
+		glDeleteBuffers(1, &current.posVBOHandle);
+		glDeleteBuffers(1, &current.tanVBOHandle);
+		glDeleteBuffers(1, &current.texVBOHandle);
 
-	 glDeleteVertexArrays(1,&current.VAOHandle);
+		glDeleteVertexArrays(1,&current.VAOHandle);
 
 	}
 	cout<<"Done\n";

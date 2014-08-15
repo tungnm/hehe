@@ -11,7 +11,7 @@
 #include "Mesh.h"
 #include <vector>
 #include "FBO.h"
-#include "RenderableObject.h"
+#include "Appearance.h"
 #include <unordered_map>
 #include "TextureViewer.h"
 #include "ParticleSystem.h"
@@ -108,7 +108,7 @@ void InitFBOs();
 cml::vector3f lightTarget;
 //render an object with its VAO handle and number of face, assuming that the matrices already been sent to the shader uniforms
 void RenderObj(Appearance *a);
-void GoraudRender();
+
 //read from G-buffer and render a full screen quad with all of the lighting calculation, ssao effect...
 void ProcessGBuffer();
 //Render a quad, assuming that the position and scale of the quad has already been sent to shader uniform
@@ -120,7 +120,7 @@ void RenderTextureToQuad(int textureHandle);
 void Renderer::BuildShadowMap(ShadowFBO* shadowFbo);
 void RenderSkyBox();
 void UnloadShaders();
-
+void UpdateLightMatrix();
 //load the mesh, texture requried such as box.obj for cubemap, random.png for SSAO..
 void LoadEngineResource();
 public:
@@ -134,13 +134,10 @@ public:
 		return &singleton;
 
 	}
-	void SetLightTarget(GLfloat x,GLfloat y,GLfloat z)
-	{
-		lightTarget.set(x,y,z);
-		UpdateLightMatrix();
-	}
+	void SetLightTarget(GLfloat x,GLfloat y,GLfloat z);
 MeshManager *meshMan;
-void UpdateLightMatrix();
+void setLightPos(GLfloat x, GLfloat y, GLfloat z);
+
 	void StartUp();
 	void ShutDown();
 	//light: right now renderer only support 1 single point light
@@ -182,6 +179,7 @@ cml::vector4f lightPos;
 	void ToggleSSAO();
 	void ToggleBloom();
 	void Display(int elapsed,int ncorn);
+	void GoraudRender();
 	void Update(int elapsed);
 	void SetupWeight(int kernelSize, GLfloat sigma2 );
 	cml::vector3f GetCameraPos(){return _cameraPosition;}

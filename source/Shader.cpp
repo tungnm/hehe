@@ -1,7 +1,6 @@
 #include "Shader.h"
 
 using namespace std;
-
 //this function just read a file into char array and return
 char *textFileRead(const char* shaderFile) {
 

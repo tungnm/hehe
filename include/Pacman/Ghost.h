@@ -3,7 +3,7 @@
 #include "glew.h"
 #include "cml\cml.h"
 #include "Map.h"
-#include "RenderableObject.h"
+#include "Appearance.h"
 #include <unordered_map>
 #include <queue>
 

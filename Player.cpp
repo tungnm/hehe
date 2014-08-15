@@ -33,53 +33,13 @@ Dir Player::GetOppositeDirection(Dir d)
 	else if (d==dup) return ddown;
 	else if (d==ddown) return dup;
 }
-void Player::Update(Map* m)
+void Player::Update()
 {
 	bool canMove=true;
 	//at center of cell:
 	
 	
-		//look for portals:
-		if (position[1]==3000)
-		{
-			InitializePos(position[0], 100);
-		}
-		else if (position[1]==100)
-		{
-			InitializePos(position[0], 3000);
-		}
-		Dir newDirection=currentDirection;
-		if(keyPress['a'])
-			newDirection=dleft;
-		else if(keyPress['d'])
-			newDirection=dright;
-		else if(keyPress['w']) 
-			newDirection=dup;
-		else if(keyPress['s'])
-			newDirection=ddown;
 
-		//vector<Dir> newDirections=m->GetPossibleDirection(position/100,GetOppositeDirection(currentDirection));
-		//if(newDirections.size()>0)
-		//{
-		//ChangeDirection(newDirections[rand()%newDirections.size()]); 
-		//}
-	if(newDirection==GetOppositeDirection(currentDirection))
-		 ChangeDirection(newDirection);
-
-	if(position[0]%100==0&&position[1]%100==0)
-	{
-		//corn eating:
-		int key=(position[0]/100-1)*m->nColumns+(position[1]/100-1);
-		if(m->cornHash.count(key)>0)
-			m->cornHash.erase(key);
-		
-		canMove=m->CanMove(position/100,newDirection);
-		if (canMove) ChangeDirection(newDirection);
-		else canMove=m->CanMove(position/100,currentDirection);
-		cout<<position<<"\n";
-	}
-	if(canMove)
-	{
 	position+=cml::vector2i(-velocity[0],velocity[1]);
 	//update orientation:
 	myAppearance->transform._orientation.zero();
@@ -93,7 +53,7 @@ void Player::Update(Map* m)
 		myAppearance->transform._orientation[1]=-1.57f;
 	
 	myAppearance->Translate(cml::vector3f((GLfloat)velocity[0]/100.0,0.0,(GLfloat)velocity[1]/100.0));//offset, accumulate by adding to the exisinting
-	}
+
 }
 void Player::UpdateAppearance()
 {

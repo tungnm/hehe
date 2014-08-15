@@ -7,11 +7,11 @@
 class Mesh;
 class Texture;
 
-enum MapType{diffuse,normal, height, specular, count };
+enum MapType{diffuse,normal, height, specular, count};
+
 
 struct MaterialInfo
 {
-
 	cml::vector3f color;
 	std::string diffuseMap;
 	std::string normalMap;
@@ -83,7 +83,5 @@ public:
 //	bool isWater;
 //	float textureScale;
 };
-
-
 
 #endif
