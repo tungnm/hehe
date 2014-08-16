@@ -11,7 +11,7 @@
 #include "Mesh.h"
 #include <vector>
 #include "FBO.h"
-#include "Appearance.h"
+#include "PhysicalBody.h"
 #include <unordered_map>
 #include "TextureViewer.h"
 #include "ParticleSystem.h"
@@ -65,15 +65,15 @@ int isBloom;
 
 //cubemap: this one works for forward rendering only
 bool hasSkybox;
-Appearance skyBox;
+PhysicalBody skyBox;
 
 //water
-Appearance waterModel; 
+PhysicalBody waterModel; 
 
 
 
-//list of appearance to be rendered using different shader program
-vector<Appearance*> _normalMapList,_solidColorList;
+//list of PhysicalBody to be rendered using different shader program
+vector<PhysicalBody*> _normalMapList,_solidColorList;
 
 //singleton class to store the mapping of resource file names and GPU handle in hash tables
 TextureManager *textureMan;
@@ -107,7 +107,7 @@ void InitStaticUniforms();
 void InitFBOs();
 cml::vector3f lightTarget;
 //render an object with its VAO handle and number of face, assuming that the matrices already been sent to the shader uniforms
-void RenderObj(Appearance *a);
+void RenderObj(PhysicalBody *a);
 
 //read from G-buffer and render a full screen quad with all of the lighting calculation, ssao effect...
 void ProcessGBuffer();
@@ -163,7 +163,7 @@ public:
 	void LoadMesh(string meshKey);
 
 	/**
-	 * This function will load the mesh, textures and create and return the appearance object
+	 * This function will load the mesh, textures and create and return the PhysicalBody object
 	 * @param meshKey fileName of the obj file, located inside textures/
 	 * @param diffTex diffuse texture file, located inside textures/
 	 * @param normTex normal map texture file
@@ -171,17 +171,17 @@ public:
 	 * @param scale scale vector
 	 * @param rot rotation in degree(I think ,maybe radian, deo' hieu?)
 	 */
-	Appearance* GetAppeance(string meshKey, string diffTex, string normTex, cml::vector3f pos, cml::vector3f scale, GLfloat rot);
+	PhysicalBody* GetAppeance(string meshKey, string diffTex, string normTex, cml::vector3f pos, cml::vector3f scale, GLfloat rot);
 
 	/**
 	 * this need to becall before any call to render normalMapObject get called
 	 */
 	void BeginRendering();
 	/**
-	 * Each object that want to render its Appearance should call this function after
+	 * Each object that want to render its PhysicalBody should call this function after
 	 * BeginRendering and before EndRendering
 	 */
-	void RenderNormalMapObject(Appearance* appearance);
+	void RenderNormalMapObject(PhysicalBody* PhysicalBody);
 	/**
 	 * Should be called after all the scene objects have rendered themsefve
 	 */

@@ -1,6 +1,6 @@
 #include "Renderer.h"
 #include "TextureViewer.h"
-
+#include "PhysicalBodyImp.h"
 //------------------------------------------HASH TABLE FOR TEXT RENDERING
 string alphabet[8]={"ABCDEFGH",
 					"IJKLMNOP",
@@ -234,8 +234,8 @@ void Renderer::RenderSkyBox()
 {
 
 	BuildGBufferSkyBox.Activate();
-	UpdateMatrices(skyBox.GetModelMatrix());
-	BuildGBufferSkyBox.SendWorldSpaceTransformtoUni(&skyBox.GetModelMatrix(), &_modelViewProj, &_normalTransform);
+	UpdateMatrices(skyBox.mPhysicalBodyImp->GetModelMatrix());
+	BuildGBufferSkyBox.SendWorldSpaceTransformtoUni(&skyBox.mPhysicalBodyImp->GetModelMatrix(), &_modelViewProj, &_normalTransform);
 	BuildGBufferSkyBox.SendVec3ToUni("camPos",_cameraPosition[0],_cameraPosition[1],_cameraPosition[2]);
 
 	//code to draw skybox
@@ -389,20 +389,21 @@ void Renderer::InitStaticUniforms()
 	horizontalBlurPass.SendVec2ToUni("screenSize",_fboList["firstBlur"]->_width,_fboList["firstBlur"]->_height);
 }
 
-Appearance* Renderer::GetAppeance(string meshKey, string diffTex, string normTex, cml::vector3f pos, cml::vector3f scale, GLfloat rot)
+PhysicalBody* Renderer::GetAppeance(string meshKey, string diffTex, string normTex, cml::vector3f pos, cml::vector3f scale, GLfloat rot)
 {
 	LoadMesh(meshKey);
 	LoadTexture(diffTex);
 	LoadTexture(normTex);
-	Appearance* newOBJ= new Appearance(meshKey);
+	PhysicalBody* newOBJ= new PhysicalBody();
+	newOBJ->setMesh(meshKey);
 	_normalMapList.push_back(newOBJ);
 
-	newOBJ->SetTexture(MapType::diffuse,diffTex);
-	newOBJ->SetTexture(MapType::normal,normTex);
+	newOBJ->setTexture(MapType::diffuse,diffTex);
+	newOBJ->setTexture(MapType::normal,normTex);
 
-	newOBJ->SetScale(scale[0],scale[1],scale[2]);
-	newOBJ->Translate(pos[0],pos[1],pos[2]);
-	newOBJ->Rotate(rot);
+	newOBJ->setScale(scale[0],scale[1],scale[2]);
+	newOBJ->translateAbsolute(pos[0],pos[1],pos[2]);
+	newOBJ->rotate(rot);
 	return newOBJ;
 }
 
@@ -410,17 +411,19 @@ Appearance* Renderer::GetAppeance(string meshKey, string diffTex, string normTex
 void Renderer::AddSolidColorOBJ(string meshKey,cml::vector3f color,cml::vector3f pos, cml::vector3f scale, GLfloat rot)
 {
 	LoadMesh(meshKey);
-	_solidColorList.push_back(new Appearance(meshKey));
-	_solidColorList[_solidColorList.size()-1]->SetColor(color[0],color[1],color[2]);
+	_solidColorList.push_back(new PhysicalBody());
+	_solidColorList[_solidColorList.size()-1]->setMesh(meshKey);
 
-	_solidColorList[_solidColorList.size()-1]->SetScale(scale[0],scale[1],scale[2]);
-	_solidColorList[_solidColorList.size()-1]->Translate(pos[0],pos[1],pos[2]);
-	_solidColorList[_solidColorList.size()-1]->Rotate(rot);
+	//_solidColorList[_solidColorList.size()-1]->setColor(color[0],color[1],color[2]);
+
+	_solidColorList[_solidColorList.size()-1]->setScale(scale[0],scale[1],scale[2]);
+	_solidColorList[_solidColorList.size()-1]->translateAbsolute(pos[0],pos[1],pos[2]);
+	_solidColorList[_solidColorList.size()-1]->rotate(rot);
 }
-void Renderer::RenderObj(Appearance* a)
+void Renderer::RenderObj(PhysicalBody* a)
 {	
 
-	MeshRenderData*mesh=&(meshMan->GetMeshRenderData(a->meshKey));
+	MeshRenderData*mesh=&(meshMan->GetMeshRenderData(a->mPhysicalBodyImp->meshKey));
 	//	if(mesh->VAOHandle!=lastVaoHandle)
 	//	{
 	//draw the mesh:
@@ -450,8 +453,8 @@ void Renderer::GoraudRender()
 	{	//send common matrix: MV, MVP...
 
 		////Send MVPLight
-		cml::vector3f myColor=_solidColorList[i]->GetColor();
-		UpdateMatrices(_solidColorList[i]->GetModelMatrix());
+		cml::vector3f myColor=_solidColorList[i]->mPhysicalBodyImp->GetColor();
+		UpdateMatrices(_solidColorList[i]->mPhysicalBodyImp->GetModelMatrix());
 		goraudPass.SendViewSpaceTransformtoUni(&_MV, &_modelViewProj, &_normalTransform);
 		goraudPass.SendVec3ToUni("color",myColor[0],myColor[1],myColor[2]);
 
@@ -521,9 +524,9 @@ void Renderer::BuildShadowMap(ShadowFBO* shadowFbo)
 void Renderer::LoadCubemap(string forward,string backward,string top, string bottom, string right, string left)
 {
 	textureMan->LoadCubeMap(forward, backward, top,  bottom,  right,  left);
-	skyBox.meshKey="box.obj";
-	skyBox.transform._position=cml::vector3f(0.0,0.0,0.0);
-	skyBox.SetScale(1.5,1.5,1.5);
+	skyBox.mPhysicalBodyImp->meshKey="box.obj";
+	skyBox.mPhysicalBodyImp->transform._position=cml::vector3f(0.0,0.0,0.0);
+	skyBox.setScale(1.5,1.5,1.5);
 	hasSkybox=true;
 }
 void Renderer::Update(int elapsed)
@@ -549,36 +552,36 @@ void Renderer::BeginRendering()
 	//glEnable(GL_DEPTH_TEST);
 }
 
-void Renderer::RenderNormalMapObject(Appearance* appearance)
+void Renderer::RenderNormalMapObject(PhysicalBody* PhysicalBody)
 {
 		static string lastTextureID="";
 		static string lastNormalMapTexID="";
 		//Render all objects with BuildGBuffer shader, writing vertex data to G-Buffer FBO
-		//	if(appearance->isNonMoving==false)
+		//	if(PhysicalBody->isNonMoving==false)
 		//update current modelView, ModelViewProjection matrix based on the model matrix of the object
 		//	{
-		UpdateMatrices(appearance->GetModelMatrix());
+		UpdateMatrices(PhysicalBody->mPhysicalBodyImp->GetModelMatrix());
 		//send these matrices to shader uniforms
 		BuildGBufferNormalMap.SendViewSpaceTransformtoUni(&_MV, &_modelViewProj, &_normalTransform);
 		//	}
-		//	else //optimization: use the matrices stored inside nonMoving appearance
-		//	BuildGBufferNormalMap.SendViewSpaceTransformtoUni(&appearance->MV, &appearance->MVP, &appearance->normalTrans);
+		//	else //optimization: use the matrices stored inside nonMoving PhysicalBody
+		//	BuildGBufferNormalMap.SendViewSpaceTransformtoUni(&PhysicalBody->MV, &PhysicalBody->MVP, &PhysicalBody->normalTrans);
 
 		//update the texture sampler for texture of current object
-		string texID=appearance->GetDiffuseMap();
+		string texID=PhysicalBody->mPhysicalBodyImp->GetDiffuseMap();
 		if(lastTextureID!=texID)
 		{
 			BuildGBufferNormalMap.SendIntToUni("tex1",textureMan->GetTextureID(texID));
 			lastTextureID=texID;
 		}
-		string normalMapTexID=appearance->GetNormalMap();
+		string normalMapTexID=PhysicalBody->mPhysicalBodyImp->GetNormalMap();
 		if(lastNormalMapTexID!=normalMapTexID)
 		{
 			BuildGBufferNormalMap.SendIntToUni("normalMap",textureMan->GetTextureID(normalMapTexID));
 			lastNormalMapTexID=normalMapTexID;
 		}
 		//render the object
-		RenderObj(appearance);
+		RenderObj(PhysicalBody);
 }
 void Renderer::EndRendering()
 {

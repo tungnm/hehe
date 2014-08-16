@@ -86,7 +86,7 @@ void init(void)
 	//Init create main scene
 	//set up game objects
 	//player:
-	player1.SetAppearance(renderer1->GetAppeance("ghost.obj","pacman.png","white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));
+	player1.SetPhysicalBody(renderer1->GetAppeance("ghost.obj","pacman.png","white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));
 	mainScene = Scene::buildScene(&player1);
 
 	//Set the world camerea
@@ -95,7 +95,7 @@ void init(void)
 	renderer1->setLightPos(-5.0, 5.0,0.0);
 
 	
-	//todo: 2 cai' boxes nay chi la appearance, ve sau no' se nam trong monster class, hay gi do...
+	//todo: 2 cai' boxes nay chi la PhysicalBody, ve sau no' se nam trong monster class, hay gi do...
 	box1 = renderer1->GetAppeance("unitBox.obj","blue.jpg","white.jpg", cml::vector3f(4.0,0.0,0.0) /*pos*/
 																	,cml::vector3f(1.0,1.0,1.0), /*scale*/
 																	0.00);
@@ -143,7 +143,8 @@ void Update(int value)
 
 
 	player1.Update();
-	box1->Rotate(angle);
+	box1->rotate(angle);
+
 	angle+=0.01f;
 	//renderer1->UpdateCamera();
 	

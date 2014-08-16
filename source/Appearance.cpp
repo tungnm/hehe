@@ -1,8 +1,14 @@
-#include "Appearance.h"
+#include "PhysicalBody.h"
+#include "PhysicalBodyImp.h"
 #include "Mesh.h"
 #include "Texture.h"
 
-void Appearance::UpdateModelMatrix()
+
+
+
+
+
+void PhysicalBodyImp::UpdateModelMatrix()
 {
 	_modelMatrix.identity();
 	//scale:
@@ -19,14 +25,14 @@ void Appearance::UpdateModelMatrix()
 
 }
 
-	void Appearance::Translate(GLfloat x,GLfloat y,GLfloat z)
+	void PhysicalBodyImp::Translate(GLfloat x,GLfloat y,GLfloat z)
 	{
 	
 	transform._position=cml::vector3f(x,y,z);//absolute setting
 	UpdateModelMatrix();
 	}
 
-	void Appearance::SetNonMoving(cml::matrix44f_c proj, cml::matrix44f_c Camera)
+	void PhysicalBodyImp::SetNonMoving(cml::matrix44f_c proj, cml::matrix44f_c Camera)
 	{
 	MV=Camera*GetModelMatrix();
 	cml::matrix_linear_transform(normalTrans,MV);//transform normal to view space
@@ -38,25 +44,25 @@ void Appearance::UpdateModelMatrix()
 	isNonMoving=true;
 	}
 
-	void Appearance::Translate( cml::vector3f offset )
+	void PhysicalBodyImp::Translate( cml::vector3f offset )
 	{
 			transform._position+=offset;//accumulate setting
 		UpdateModelMatrix();	
 
 	}
 
-	void Appearance::SetScale(GLfloat scaleX,GLfloat scaleY,GLfloat scaleZ)
+	void PhysicalBodyImp::SetScale(GLfloat scaleX,GLfloat scaleY,GLfloat scaleZ)
 	{
 	transform._scale=cml::vector3f(scaleX,scaleY,scaleZ);
 		UpdateModelMatrix();	
 	}
 
-	//void Appearance::SetFliped(bool isFlip)
+	//void PhysicalBodyImp::SetFliped(bool isFlip)
 	//{
 	//	_flipSide=isFlip;
 	//}
 
-void Appearance::SetTexture(MapType type, std::string textureKey)
+void PhysicalBodyImp::SetTexture(MapType type, std::string textureKey)
 {
 	if (type==MapType::diffuse)
 		_material.diffuseMap=textureKey;
@@ -68,55 +74,66 @@ void Appearance::SetTexture(MapType type, std::string textureKey)
 		_material.specularMap=textureKey;
 }
 
-Appearance::Appearance(std::string mymeshKey)
+void PhysicalBodyImp::setMesh(std::string mymeshKey)
 {
-	/*_name="noName";
-	_flipSide=false;
-	*/
+
 	meshKey=mymeshKey;
 	transform._position.set(0.0f,0.0f,0.0f);
 	transform._orientation.zero();
 	transform._scale=cml::vector3f(1.0,1.0,1.0);
 	isNonMoving=false;
 	UpdateModelMatrix();	
-	/*isWater=false;
-	textureScale=1;*/
+
 }
 
 
 
-cml::matrix44f_c Appearance::GetModelMatrix()
+cml::matrix44f_c PhysicalBodyImp::GetModelMatrix()
 {
 	return _modelMatrix;
 }
 
-void Appearance::Rotate(float angle)
+void PhysicalBodyImp::Rotate(float angle)
 {
 	transform._orientation[1]=angle;
 		UpdateModelMatrix();	
 }
 
-//void Appearance::SetName( string name )
-//{
-//	_name=name;
-//}
 
-//std::string Appearance::GetName()
-//{
-//	return _name;
-//}
+PhysicalBody::PhysicalBody() : mPhysicalBodyImp(new PhysicalBodyImp())
+{}
 
-//cml::vector3f Appearance::GetPosition()
-//{
-//	return _position;
-//}
-//
-//cml::vector3f Appearance::GetScale()
-//{
-//	return _scale;
-//}
-//
-//GLfloat Appearance::GetOrientation()
-//{
-//	return _orientation;
-//}
+PhysicalBody::~PhysicalBody()
+{
+	delete mPhysicalBodyImp;
+}
+
+void PhysicalBody::setTexture(MapType type, std::string textureKey)
+{
+	mPhysicalBodyImp->SetTexture(type, textureKey);
+}
+
+void PhysicalBody::translateAbsolute(GLfloat x,GLfloat y,GLfloat z)
+{
+	mPhysicalBodyImp->Translate(x, y, z);
+}
+
+void PhysicalBody::translateRelative(cml::vector3f offset)
+{
+	mPhysicalBodyImp->Translate(offset);
+}
+
+void PhysicalBody::setScale(GLfloat scaleX,GLfloat scaleY,GLfloat scaleZ)
+{
+	mPhysicalBodyImp->SetScale(scaleX, scaleY, scaleZ);
+}
+
+void PhysicalBody::rotate(float angle)
+{
+	mPhysicalBodyImp->Rotate(angle);
+}
+
+void PhysicalBody::setMesh(std::string meshKey)
+{
+	mPhysicalBodyImp->setMesh(meshKey);
+}

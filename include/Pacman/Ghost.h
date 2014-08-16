@@ -3,7 +3,7 @@
 #include "glew.h"
 #include "cml\cml.h"
 #include "Map.h"
-#include "Appearance.h"
+#include "PhysicalBody.h"
 #include <unordered_map>
 #include <queue>
 
@@ -24,11 +24,11 @@ private:
 
 
 	Dir currentDirection;
-	Appearance* myAppearance;
+	PhysicalBody* myPhysicalBody;
 	int speed;
 	cml::vector2i velocity;
 	
-	void UpdateAppearance();
+	void UpdatePhysicalBody();
 	Dir GetOppositeDirection(Dir d);
 
 public:
@@ -51,13 +51,13 @@ public:
 	void SetMesh(string key)
 	{
 
-		myAppearance->meshKey=key;
+		myPhysicalBody->setMesh(key);
 	}
 	void SetNormal()
 	{
 		isFollowingPath=false;
 	//	SetSpeed(20);
-		myAppearance->meshKey="ghost.obj";
+		myPhysicalBody->setMesh("ghost.obj");
 	}
 	void SetNormalColor()
 	{
@@ -67,7 +67,7 @@ public:
 	}
 	void ChangeTexture(string newTexture)
 	{
-		myAppearance->SetTexture(MapType::diffuse, newTexture);
+		myPhysicalBody->setTexture(MapType::diffuse, newTexture);
 	}
 	void SetSpeed(int x)
 	{
@@ -78,7 +78,7 @@ public:
 	}
 	void ChangeDirection(Dir d);
 	void InitializePos(int x,int y);
-	void SetAppearance(Appearance* a);
+	void SetPhysicalBody(PhysicalBody* a);
 	void Update(Map* m, int timelapsed, cml::vector2i playerPos, cml::vector2i playerVelocity, cml::vector2i redPosition);
 	
 	

@@ -2,17 +2,17 @@
 #include <time.h>
 
 
-void Ghost::SetAppearance(Appearance* a)
+void Ghost::SetPhysicalBody(PhysicalBody* a)
 {
-	myAppearance=a;
-	myOriginalTexture=a->GetDiffuseMap();
+	myPhysicalBody=a;
+//	myOriginalTexture=a->GetDiffuseMap();
 }
 
 void Ghost::InitializePos(int xBoard, int yBoard)
 {
-	//myAppearance->Translate(pos[0],pos[1],pos[2]);
+	//myPhysicalBody->Translate(pos[0],pos[1],pos[2]);
 	position=cml::vector2i(xBoard,yBoard);
-	myAppearance->Translate(-(float)position[0]/100.0,0.4,(float)position[1]/100.0);//offset, accumulate by adding to the exisinting
+	myPhysicalBody->translateAbsolute(-(float)position[0]/100.0,0.4,(float)position[1]/100.0);//offset, accumulate by adding to the exisinting
 	//	ChangeDirection(d);
 }
 
@@ -265,10 +265,10 @@ void Ghost::Update(Map* m, int timelapse, cml::vector2i playerPos, cml::vector2i
 		if(canMove)
 		{
 			position+=cml::vector2i(-velocity[0],velocity[1]);
-			myAppearance->Translate(cml::vector3f((GLfloat)velocity[0]/100.0,0.0,(GLfloat)velocity[1]/100.0));//offset, accumulate by adding to the exisinting
+			myPhysicalBody->translateRelative(cml::vector3f((GLfloat)velocity[0]/100.0,0.0,(GLfloat)velocity[1]/100.0));//offset, accumulate by adding to the exisinting
 		}
 }
-void Ghost::UpdateAppearance()
+void Ghost::UpdatePhysicalBody()
 {
 
 }

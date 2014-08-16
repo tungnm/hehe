@@ -191,7 +191,7 @@ return true;
 		cml::vector3f color;
 
 		//for moving particle system:
-		Appearance* host;
+		PhysicalBody* host;
 		bool isMoving;
 
 		Particle*  particleList;
@@ -243,7 +243,7 @@ return true;
 		{
 			continuous=true;
 		}
-		void SetHost(Appearance* myHost)
+		void SetHost(PhysicalBody* myHost)
 		{
 			host=myHost;
 			isMoving=true;

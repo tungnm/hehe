@@ -1,31 +1,31 @@
 #include "Renderer.h"
-#include "Appearance.h"
+#include "PhysicalBody.h"
 #include "Pacman\Player.h"
 
-void Player::SetAppearance(Appearance* a)
+void Player::SetPhysicalBody(PhysicalBody* a)
 {
-	myAppearance=a;
+	myPhysicalBody=a;
 }
 
 void Player::InitializePos(float x,float y, float z)
 {
 	position=cml::vector3f(x,y,z);
-	myAppearance->Translate(-(float)position[0]/100.0,0.4,(float)position[1]/100.0);//offset, accumulate by adding to the exisinting
+	myPhysicalBody->translateAbsolute(-(float)position[0]/100.0,0.4,(float)position[1]/100.0);//offset, accumulate by adding to the exisinting
 }
 
 void Player::draw()
 {
 	//todo: ko hieu access singleton th'e nay co' du'ng kieu ko. buoi!
-	Renderer::GetInstance()->RenderNormalMapObject(myAppearance);
+	Renderer::GetInstance()->RenderNormalMapObject(myPhysicalBody);
 }
 
 void Player::Update()
 {
 	
 }
-void Player::UpdateAppearance()
+void Player::UpdatePhysicalBody()
 {
-	//convert the board coord to actual appearance:
+	//convert the board coord to actual PhysicalBody:
 
 }
 
@@ -65,15 +65,17 @@ void PacMan::Update()
 	//at center of cell:
 	position+=cml::vector3f(-velocity[0],velocity[1],0.0f);
 
-	//update orientation:
-	myAppearance->transform._orientation.zero();
-	if(currentDirection==dleft)
-		myAppearance->transform._orientation[0]=3.14f;
-	else if(currentDirection==dright)
-		myAppearance->transform._orientation[0]=0.0f;
-	else if(currentDirection==dup)
-		myAppearance->transform._orientation[1]=1.57f;
-	else if(currentDirection==ddown)
-		myAppearance->transform._orientation[1]=-1.57f;
-	myAppearance->Translate(cml::vector3f((GLfloat)velocity[0]/100.0,0.0,(GLfloat)velocity[1]/100.0));//offset, accumulate by adding to the exisinting
+	////update orientation:
+	//myPhysicalBody->transform._orientation.zero();
+	//if(currentDirection==dleft)
+	//	myPhysicalBody->transform._orientation[0]=3.14f;
+	//else if(currentDirection==dright)
+	//	myPhysicalBody->transform._orientation[0]=0.0f;
+	//else if(currentDirection==dup)
+	//	myPhysicalBody->transform._orientation[1]=1.57f;
+	//else if(currentDirection==ddown)
+	//	myPhysicalBody->transform._orientation[1]=-1.57f;
+	//myPhysicalBody->Translate(cml::vector3f((GLfloat)velocity[0]/100.0,0.0,(GLfloat)velocity[1]/100.0));//offset, accumulate by adding to the exisinting
+
+
 }

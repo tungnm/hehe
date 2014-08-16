@@ -14,8 +14,8 @@ Scene * mainScene;
 
 PacMan player1;
 
-Appearance* box1;
-Appearance* box2;
+PhysicalBody* box1;
+PhysicalBody* box2;
 
 //free resource
 int pauseTimer;

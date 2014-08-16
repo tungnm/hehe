@@ -3,7 +3,7 @@
 #include "glew.h"
 #include "cml\cml.h"
 #include <string>
-#include "Appearance.h"
+#include "PhysicalBody.h"
 #include "Renderer.h"
 #include <vector>
 #include <unordered_set>
@@ -19,7 +19,7 @@ private:
 	GLfloat cellWidth;
 	GLfloat cellHeight;
 	cml::vector3f Origin;
-	Appearance* cellMesh;
+	PhysicalBody* cellMesh;
 	cml::vector2i GetVectorFromHash(int hashKey);
 Dir GetDirection(int sourcei, int sourcej, int goali, int goalj);
 int GetHashKey(cml::vector2i a);
