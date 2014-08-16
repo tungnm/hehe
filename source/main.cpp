@@ -13,7 +13,7 @@
 #include "UtilityFunctions.h"
 #include <unordered_map>
 #include "GlobalObjects.h"
-
+#include "DbgOut.h"
 
 void Close()
 {
@@ -27,6 +27,8 @@ void UpdateKeyboard()
 	if (keysPressed['a'])
 	{
 		renderer1->StrafeCamRight((current-lastTick)*CAMERA_MOVEMENT_SPEED);
+		player1.SetSpeed(2.5f)	;
+		player1.ChangeDirection(Dir::dleft);
 	}
 	else if (keysPressed['d'])
 	{
@@ -82,7 +84,7 @@ void init(void)
 
 	//Setup renderer
 	renderer1->StartUp();
-	renderer1->SetCameraPosition(cml::vector3f(6.0,16.0,0.0), cml::vector3f(0.0,0.5,0.0));
+	renderer1->SetCameraPosition(cml::vector3f(6.0,16.0,10.0), cml::vector3f(0.0,0.0,0.0));
 	renderer1->SetLightTarget(0.0,0.5,0.0);
 	renderer1->setLightPos(-5.0, 5.0,0.0);
 	//renderer1->AddText("score","Score",cml::vector2f(0.60,0.75),0.03f,0.01f);
@@ -93,12 +95,13 @@ void init(void)
 	//set up game objects
 	//player:
 	player1.SetAppearance(renderer1->GetAppeance("pacman.obj","pacman.png","white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));
+
 	//todo: 2 cai' boxes nay chi la appearance, ve sau no' se nam trong monster class, hay gi do...
 	box1 = renderer1->GetAppeance("box.obj","blue.jpg","white.jpg", cml::vector3f(2.0,0.0,3.0),cml::vector3f(0.2,0.3,0.1),0.01);
 	box2 = renderer1->GetAppeance("box.obj","red.jpg","white.jpg", cml::vector3f(2.0,3.0,3.0),cml::vector3f(0.05,0.05,0.05),0.01);
 
 	//deo hieu ca'i nay de lam gi, cha'c xem sau
-	player1.SetKeyBuffer(keysPressed);
+	player1.SetKeyBuffer(keysPressed); 
 }
 
 void display()
@@ -109,10 +112,10 @@ void display()
 	
 	//todo: cho het nhung ca'i draw() nay vao trong scene->draw(), hay gi do'...
 	player1.draw();
+	
 	//todo: day chi la 2 ca'i test boxes, ve sau no' se thuoc vao` monster.draw()
 	renderer1->RenderNormalMapObject(box1);
-	renderer1->RenderNormalMapObject(box2);
-
+	//renderer1->RenderNormalMapObject(box2);
 
 	renderer1->EndRendering();
 	glutSwapBuffers();
@@ -133,8 +136,6 @@ void Update(int value)
 	keysPressed['w']--;
 	else if(keysPressed['s']>0)
 	keysPressed['s']--;
-
-
 	//cout<<keysPressed['a']<<"\n";
 
 
@@ -151,8 +152,12 @@ void Update(int value)
 
 }
 
+
+
 int main(int argc, char **argv)
 {
+	dCritical()<<"Error";
+
 	lastTick=0;
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
