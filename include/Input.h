@@ -9,7 +9,7 @@
 		
 	void processNormalKeysUp(unsigned char key, int x, int y)
 	{
-	if(key!='a'&&key!='d'&&key!='s'&&key!='w')
+	//	if(key!='a'&&key!='d'&&key!='s'&&key!='w')
 		keysPressed[key]=0;
 	}
 	void processNormalKeys(unsigned char key, int x, int y) 

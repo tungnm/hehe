@@ -1,5 +1,10 @@
+
 #ifndef DbgOut_h__
 #define DbgOut_h__
+
+#include <windows.h>
+#include <sstream>
+#include <iostream>
 
 struct outstr //Base class out string
 {
@@ -46,5 +51,14 @@ struct dWarning : public outstr //Critical debug
 	}
 };
 
+
+struct dInfo : public outstr //Info, different color for highlight
+{
+	~dInfo() {
+		SetConsoleTextAttribute(hConsole, 3 /*Magenta*/);
+		std::cerr << m_SS.str() << std::endl;
+		SetConsoleTextAttribute(hConsole, 15 /*White*/);
+	}
+};
 
 #endif

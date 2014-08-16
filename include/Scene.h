@@ -3,15 +3,14 @@
 
 #include<vector>
 
-class Appearance;
+//class Appearance;
+//class Survivor;
+class Player;
 
-class Scene
+class Scene //Should be converted into abstract or base Scene. It's ok for now.
 {
 	public:
-		Scene()
-		{
-
-		}
+		Scene();
 
 		~Scene()
 		{
@@ -19,15 +18,36 @@ class Scene
 		}
 
 		void update(); //Scene update itself;
-		void render();
+		void draw();
+		void add(Player * obj);
 
+		Scene * nextScene();
+		Scene * prevScene();
+
+		static Scene * buildScene(Player *mainPlayer); //Factory method
+
+		void updateKeyBoard(int keys[]);
 	private:
-		std::vector<Appearance*> objList;
-		Appearance *player; 
+		std::vector<Player *> objList;
+		Player *player; 
+
 		//Entity background;
 		//cml::vector3f playerStartPos;
 		Scene *next;
 		Scene *prev;
+
+		void setMainPlayer(Player *mainPlayer);
+};
+
+//RegularScene
+
+//PuzzeScene
+
+//Intro, story Scene
+
+class SceneList
+{
+	std::vector<Scene *> scenes;
 };
 
 #endif // Scene_h__

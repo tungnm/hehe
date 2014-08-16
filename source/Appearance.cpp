@@ -2,8 +2,6 @@
 #include "Mesh.h"
 #include "Texture.h"
 
-
-
 void Appearance::UpdateModelMatrix()
 {
 	_modelMatrix.identity();

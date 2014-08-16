@@ -1,9 +1,10 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include "glew.h"
+
 #include "cml\cml.h"
-#include "Renderer.h"
-#include "Appearance.h"
+//#include "DbgOut.h"
+
+class Appearance;
 
 typedef enum{dleft, dright, dup, ddown, upleft, upright, downleft, downright} Dir;
 
@@ -16,20 +17,15 @@ protected:
 	virtual void UpdateAppearance();
 
 public:
-	cml::vector2i position;
-	cml::vector2i velocity;
-	
+	cml::vector3f position;
+	cml::vector3f velocity;
 
 	void SetKeyBuffer(int* keyBuffer);
-
 	void draw();
 
-	void InitializePos(int x,int y);
+	void InitializePos(float x,float y, float z);
 	void SetAppearance(Appearance* a);
-	
-	
 	void SetSpeed(int s){speed=s;}
-
 	
 	virtual void Update();
 	
@@ -47,5 +43,23 @@ public:
 	void Update() override;
 
 };
+
+
+class Monster : public Player
+{
+public:
+	Monster();
+	~Monster();
+
+
+};
+
+class Survivor: public Player
+{
+	Survivor();
+	~Survivor();
+};
+
+
 
 #endif

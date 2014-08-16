@@ -1,3 +1,4 @@
+#include "DbgOut.h"
 #include "glew.h"
 #include<iostream>
 #include <vector>
@@ -13,7 +14,7 @@
 #include "UtilityFunctions.h"
 #include <unordered_map>
 #include "GlobalObjects.h"
-#include "DbgOut.h"
+
 
 void Close()
 {
@@ -23,12 +24,11 @@ void UpdateKeyboard()
 {
 	long current=glutGet(GLUT_ELAPSED_TIME);
 
+	mainScene->updateKeyBoard(keysPressed);
 
 	if (keysPressed['a'])
 	{
 		renderer1->StrafeCamRight((current-lastTick)*CAMERA_MOVEMENT_SPEED);
-		player1.SetSpeed(2.5f)	;
-		player1.ChangeDirection(Dir::dleft);
 	}
 	else if (keysPressed['d'])
 	{
@@ -54,14 +54,14 @@ void UpdateKeyboard()
 	}
 	  if (keysPressed['b'])//&&current-lastFunctionClick>700)
 	{
-	//	renderer1->lightPos[1]-=0.9f;
+		//renderer1->lightPos[1]-=0.9f;
 		
 		/*renderer1->ToggleBloom();
 		lastFunctionClick=current;*/
 	}
 	if (keysPressed['p']&&current-lastFunctionClick>700)
 	{
-		cout<<renderer1->GetCameraPos();
+		dInfo()<<renderer1->GetCameraPos();
 		lastFunctionClick=current;
 	}
 
@@ -72,33 +72,34 @@ void UpdateKeyboard()
 	}
 
 	lastTick=current;
+	
 }
 
 
 void init(void)
 {	
-	//simpleMap.ReadBitArray("simpleMap.txt");
-
 	//initialize render
 	renderer1=Renderer::GetInstance();
-
 	//Setup renderer
 	renderer1->StartUp();
-	renderer1->SetCameraPosition(cml::vector3f(6.0,16.0,10.0), cml::vector3f(0.0,0.0,0.0));
-	renderer1->SetLightTarget(0.0,0.5,0.0);
-	renderer1->setLightPos(-5.0, 5.0,0.0);
-	//renderer1->AddText("score","Score",cml::vector2f(0.60,0.75),0.03f,0.01f);
-	//renderer1->AddText("lives","Lives",cml::vector2f(0.60,0.65),0.03f,0.01f);
-	//renderer1->AddText("goal","no", cml::vector2f(0.0,0.0), 0.1,0.0);
-	//renderer1->HideText("goal");
-
+	
+	//Init create main scene
 	//set up game objects
 	//player:
-	player1.SetAppearance(renderer1->GetAppeance("pacman.obj","pacman.png","white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));
+	player1.SetAppearance(renderer1->GetAppeance("ghost.obj","pacman.png","white.jpg", cml::vector3f(0.0,0.0,0.0),cml::vector3f(1.0,1.0,1.0),0.0));
+	mainScene = Scene::buildScene(&player1);
 
+	//Set the world camerea
+	renderer1->SetCameraPosition(cml::vector3f(0.0,0.0,20.0), cml::vector3f(0.0,0.0,0.0));
+	renderer1->SetLightTarget(0.0,0.5,0.0);
+	renderer1->setLightPos(-5.0, 5.0,0.0);
+
+	
 	//todo: 2 cai' boxes nay chi la appearance, ve sau no' se nam trong monster class, hay gi do...
-	box1 = renderer1->GetAppeance("box.obj","blue.jpg","white.jpg", cml::vector3f(2.0,0.0,3.0),cml::vector3f(0.2,0.3,0.1),0.01);
-	box2 = renderer1->GetAppeance("box.obj","red.jpg","white.jpg", cml::vector3f(2.0,3.0,3.0),cml::vector3f(0.05,0.05,0.05),0.01);
+	box1 = renderer1->GetAppeance("unitBox.obj","blue.jpg","white.jpg", cml::vector3f(4.0,0.0,0.0) /*pos*/
+																	,cml::vector3f(1.0,1.0,1.0), /*scale*/
+																	0.00);
+	//box2 = renderer1->GetAppeance("box.obj","red.jpg","white.jpg", cml::vector3f(2.0,3.0,3.0),cml::tevector3f(0.05,0.05,0.05),0.01);
 
 	//deo hieu ca'i nay de lam gi, cha'c xem sau
 	player1.SetKeyBuffer(keysPressed); 
@@ -123,11 +124,13 @@ void display()
 
 }
 
+static float angle=0;
+
 void Update(int value)
 {
 		
 	UpdateKeyboard();
-	
+	/*
 	if(keysPressed['a']>0)
 	keysPressed['a']--;
 	else if(keysPressed['d']>0)
@@ -135,11 +138,13 @@ void Update(int value)
 	else if(keysPressed['w']>0)
 	keysPressed['w']--;
 	else if(keysPressed['s']>0)
-	keysPressed['s']--;
+	keysPressed['s']--;*/
 	//cout<<keysPressed['a']<<"\n";
 
 
 	player1.Update();
+	box1->Rotate(angle);
+	angle+=0.01f;
 	//renderer1->UpdateCamera();
 	
 	/*
@@ -152,11 +157,9 @@ void Update(int value)
 
 }
 
-
-
 int main(int argc, char **argv)
 {
-	dCritical()<<"Error";
+	dWarning()<<"Starting Engine.! Loading Resources";
 
 	lastTick=0;
 	glutInit(&argc, argv);
@@ -170,7 +173,9 @@ int main(int argc, char **argv)
 	glutKeyboardFunc(processNormalKeys);
 	glutKeyboardUpFunc(processNormalKeysUp);
 	glutTimerFunc(15, Update, 0);
+	
 	init();
+	
 	glutDisplayFunc(display); 
 	glutWarpPointer(W_WIDTH/2.0,W_HEIGHT/2.0);
 	glutMainLoop();

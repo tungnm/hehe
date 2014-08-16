@@ -1,3 +1,5 @@
+#include "Renderer.h"
+#include "Appearance.h"
 #include "Pacman\Player.h"
 
 void Player::SetAppearance(Appearance* a)
@@ -5,9 +7,9 @@ void Player::SetAppearance(Appearance* a)
 	myAppearance=a;
 }
 
-void Player::InitializePos(int xBoard, int yBoard)
+void Player::InitializePos(float x,float y, float z)
 {
-	position=cml::vector2i(xBoard,yBoard);
+	position=cml::vector3f(x,y,z);
 	myAppearance->Translate(-(float)position[0]/100.0,0.4,(float)position[1]/100.0);//offset, accumulate by adding to the exisinting
 }
 
@@ -38,13 +40,13 @@ void Player::SetKeyBuffer( int* keyBuffer )
 void PacMan::ChangeDirection(Dir d)
 {
 	if(d==dup)
-		velocity.set(speed,0);
+		velocity.set(speed,0,0);
 	else 	if(d==ddown)
-		velocity.set(-speed,0);
+		velocity.set(-speed,0,0);
 	else 	if(d==dleft)
-		velocity.set(0,-speed);
+		velocity.set(0,-speed,0);
 	else 	if(d==dright)
-		velocity.set(0,speed);
+		velocity.set(0,speed,0);
 	currentDirection=d;
 
 }
@@ -61,7 +63,7 @@ void PacMan::Update()
 {
 	bool canMove=true;
 	//at center of cell:
-	position+=cml::vector2i(-velocity[0],velocity[1]);
+	position+=cml::vector3f(-velocity[0],velocity[1],0.0f);
 
 	//update orientation:
 	myAppearance->transform._orientation.zero();
