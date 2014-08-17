@@ -16,9 +16,9 @@ set (ENGINE_SOURCE
 	${PROJECT_SOURCE_DIR}/Install/GL/glew.c
 	)
 
-add_library (RaptorEngine SHARED ${ENGINE_SOURCE})
+add_library (RaptorEngine ${ENGINE_SOURCE})
 target_link_libraries(RaptorEngine freeglut assimp SOIL)
 #copy artifact to Install folder
-install (TARGETS RaptorEngine RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/Install/RaptorEngine/)
+install (TARGETS RaptorEngine ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/Install/RaptorEngine/)
 install(DIRECTORY interface DESTINATION ${PROJECT_SOURCE_DIR}/Install/RaptorEngine/)
 install(DIRECTORY shaders DESTINATION ${PROJECT_SOURCE_DIR}/Install/RaptorEngine/)
