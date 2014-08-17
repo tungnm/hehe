@@ -2,8 +2,12 @@
 include_directories("${PROJECT_SOURCE_DIR}/Install/RaptorEngine/interface")
 link_directories("${PROJECT_SOURCE_DIR}/Install/RaptorEngine")
 set (GAME_SOURCE
+	Player.h
 	Player.cpp
 	Scene.cpp
+	Scene.h
+	DbgOut.h
+	Input.h
 	main.cpp
 	)
 
