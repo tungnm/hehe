@@ -43,6 +43,23 @@ public:
 	* Rotate the object along vertical axis
 	*/
 	void rotate(float angle);
+
+	/**
+	* Rotate the object along X axis
+	*/
+	void rotateX(float angle);
+
+	/**
+	* Rotate the object along Y axis
+	*/
+	void rotateY(float angle);
+
+	/**
+	* Rotate the object along Z axis
+	*/
+	void rotateZ(float angle);
+	
+	
 	//my real physical body, no one can see this except the lord of the raptors
 	PhysicalBodyImp* mPhysicalBodyImp;
 };

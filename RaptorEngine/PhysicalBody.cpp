@@ -3,11 +3,6 @@
 #include "Mesh.h"
 #include "Texture.h"
 
-
-
-
-
-
 void PhysicalBodyImp::UpdateModelMatrix()
 {
 	_modelMatrix.identity();
@@ -88,6 +83,7 @@ void PhysicalBodyImp::setMesh(std::string mymeshKey)
 
 
 
+
 cml::matrix44f_c PhysicalBodyImp::GetModelMatrix()
 {
 	return _modelMatrix;
@@ -99,6 +95,28 @@ void PhysicalBodyImp::Rotate(float angle)
 		UpdateModelMatrix();	
 }
 
+void PhysicalBodyImp::RotateX(float angle)
+{
+	transform._orientation[0]=angle;
+	UpdateModelMatrix();	
+}
+
+void PhysicalBodyImp::RotateY( float angle ) 
+{
+	transform._orientation[1]=angle;
+	UpdateModelMatrix();	
+}
+
+void PhysicalBodyImp::RotateZ( float angle ) 
+{
+	transform._orientation[2]=angle;
+	UpdateModelMatrix();	
+}
+
+
+///////////////////////////////////
+//PhysiscalBody Interface Delegates
+///////////////////////////////////
 
 PhysicalBody::PhysicalBody() : mPhysicalBodyImp(new PhysicalBodyImp())
 {}
@@ -137,3 +155,14 @@ void PhysicalBody::setMesh(std::string meshKey)
 {
 	mPhysicalBodyImp->setMesh(meshKey);
 }
+
+void PhysicalBody::rotateX( float angle )
+{
+	mPhysicalBodyImp->RotateX(angle);
+}
+
+void PhysicalBody::rotateY( float angle )
+{
+	mPhysicalBodyImp->RotateY(angle);
+}
+

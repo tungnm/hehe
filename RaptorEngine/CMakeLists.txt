@@ -4,6 +4,19 @@
 include_directories("${PROJECT_SOURCE_DIR}/Install/SOIL/include")
 
 set (ENGINE_SOURCE
+	Constant.h
+	FBO.h
+	GUIElement.h
+	Input.h
+	Mesh.h
+	ParticleSystem.h
+	PhysicalBodyImp.h
+	Renderer.h
+	rgbe.h
+	Shader.h
+	Texture.h
+	TextureViewer.h
+	UtilityFunctions.h
 	FBO.cpp
 	Mesh.cpp
 	PhysicalBody.cpp
@@ -14,6 +27,7 @@ set (ENGINE_SOURCE
 	TextureViewer.cpp
 	UtilityFunctions.cpp
 	${PROJECT_SOURCE_DIR}/Install/GL/glew.c
+	
 	)
 
 add_library (RaptorEngine ${ENGINE_SOURCE})

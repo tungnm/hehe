@@ -21,6 +21,7 @@ struct Transformation
 	cml::vector3f _orientation;
 	cml::vector3f _scale;
 };
+
 class PhysicalBodyImp
 {
 private:
@@ -65,5 +66,12 @@ public:
 	cml::matrix44f_c GetModelMatrix();
 	void Rotate(float angle);
 	void setMesh(std::string meshKey);
+
+	void RotateX(float angle);
+	void RotateY( float angle ) ;
+	void RotateZ( float angle );
+
+
+
 
 };
