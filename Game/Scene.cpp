@@ -3,21 +3,25 @@
 #include "Player.h"
 
 #include "DbgOut.h"
+#include "..\RaptorEngine\interface\PhysicalBody.h"
 
 Scene::Scene()
 {
 	this->next=NULL;
 	this->prev=NULL;
 
-	
+
 }
 
-void Scene::update() /*Scene update itself */
+void Scene::update(float dt) /*Scene update itself */
 {
+	this->player->Update(dt);
+	
 	for(unsigned int i=0;i<this->objList.size();i++)
 	{
-		this->objList[i]->Update();
+		this->objList[i]->Update(dt);
 	}
+	
 }
 
 void Scene::draw()
@@ -63,8 +67,28 @@ void Scene::updateKeyBoard( int keys [])
 {
 	if (keys['a'])
 	{
-		debug()<<"Key a is pressed";
-		this->player->SetSpeed(2.5f)	;
-		((PacMan *)player)->ChangeDirection(Dir::dleft); //
+		
+		this->player->SetRotateSpeed(2.25f);
+		this->player->rotateY();
+	}
+
+	if (keys['d'])
+	{
+		this->player->SetRotateSpeed(-2.25f);
+		this->player->rotateY();
+	}
+
+
+	if (keys['w'])
+	{
+		this->player->SetSpeed(2.25f);
+		this->player->forward();
+	}
+
+	if (keys['s'])
+	{
+		this->player->SetRotateSpeed(-2.25f);
+		this->player->SetSpeed(2.25f);
+		this->player->backward();
 	}
 }

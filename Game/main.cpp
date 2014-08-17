@@ -12,6 +12,7 @@
 #include <unordered_map>
 #include "GlobalObjects.h"
 #include "freeglut.h"
+#include "Scene.h"
 
 void Close()
 {
@@ -69,7 +70,8 @@ void UpdateKeyboard()
 	//}
 
 	//lastTick=current;
-	
+
+	mainScene->updateKeyBoard(keysPressed);
 }
 
 
@@ -87,24 +89,23 @@ void init(void)
 	gEngine->loadTexture("pacman.png");
 	gEngine->loadTexture("white.jpg");
 	gEngine->loadTexture("blue.jpg");
-	//Init create main scene
-	//set up game objects
-	//player:
+	
+	//Set the world camerea
+	gEngine->setUpCameraAbsolute(cml::vector3f(10.0,10.0,20.0), cml::vector3f(0.0,0.0,0.0));
+	gEngine->setLightTarget(0.0,0.5,0.0);
+	gEngine->setLightPos(-5.0, 5.0,0.0);
+	
+	
 	PhysicalBody* playerBody = new PhysicalBody();
 	playerBody->setMesh("ghost.obj");
 	playerBody->setTexture(MapType::diffuse, "pacman.png");
 	playerBody->setTexture(MapType::normal, "white.jpg");
 	playerBody->translateAbsolute(0.0,0.0,0.0);
 	playerBody->setScale(1.0,1.0,1.0);
-	player1.SetPhysicalBody(playerBody);
-	mainScene = Scene::buildScene(&player1);
+	player.SetPhysicalBody(playerBody);
+	mainScene = Scene::buildScene(&player);
 
-	//Set the world camerea
-	gEngine->setUpCameraAbsolute(cml::vector3f(0.0,0.0,20.0), cml::vector3f(0.0,0.0,0.0));
-	gEngine->setLightTarget(0.0,0.5,0.0);
-	gEngine->setLightPos(-5.0, 5.0,0.0);
 
-	
 	//todo: 2 cai' boxes nay chi la PhysicalBody, ve sau no' se nam trong monster class, hay gi do...
 	box1 = new PhysicalBody();
 	box1->setMesh("unitBox.obj");
@@ -112,9 +113,13 @@ void init(void)
 	box1->setTexture(MapType::normal, "white.jpg");
 	box1->translateAbsolute(4.0,0.0,0.0);
 	box1->setScale(1.0,1.0,1.0);
-	
+
+	enemy.SetPhysicalBody(box1);
+
+	mainScene->add(&enemy);
+
 	//deo hieu ca'i nay de lam gi, cha'c xem sau
-	player1.SetKeyBuffer(keysPressed); 
+	player.SetKeyBuffer(keysPressed); 
 }
 
 void display()
@@ -124,7 +129,8 @@ void display()
 	gEngine->beginRendering();
 
 	//todo: cho het nhung ca'i draw() nay vao trong scene->draw(), hay gi do'...
-	player1.draw();
+	//player1.draw();
+	mainScene->draw();
 	
 	//todo: day chi la 2 ca'i test boxes, ve sau no' se thuoc vao` monster.draw()
 	gEngine->renderPhysicalBody(box1);
@@ -132,42 +138,19 @@ void display()
 
 	gEngine->endRendering();
 	glutSwapBuffers();
-	
 
 }
 
-static float angle=0;
-
 void Update(int value)
 {
-		
 	UpdateKeyboard();
-	/*
-	if(keysPressed['a']>0)
-	keysPressed['a']--;
-	else if(keysPressed['d']>0)
-	keysPressed['d']--;
-	else if(keysPressed['w']>0)
-	keysPressed['w']--;
-	else if(keysPressed['s']>0)
-	keysPressed['s']--;*/
-	//cout<<keysPressed['a']<<"\n";
-
-
-	player1.Update();
-	box1->rotate(angle);
-
-	angle+=0.01f;
-	//gEngine->UpdateCamera();
 	
-	/*
-	//update score text:
-	gEngine->ChangeTex("score","Score:"+Utility::inToString(a.GetCornEatean()));
-	gEngine->ChangeTex("lives","Lives:"+Utility::inToString(lives));
-	*/
+	float deltaTime=1.0/60.0; //Assume 60FPS
+
+	mainScene->update(deltaTime);
+	
 	glutPostRedisplay();
 	glutTimerFunc(15, Update, 0);
-
 }
 
 int main(int argc, char **argv)

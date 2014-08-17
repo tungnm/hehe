@@ -2,6 +2,15 @@
 #include "PhysicalBody.h"
 #include "Player.h"
 
+
+Player::Player()
+{
+	this->velocity.zero();
+	this->angularVelocity.zero();
+	this->position.zero();
+	this->orientation.zero();
+}
+
 void Player::SetPhysicalBody(PhysicalBody* a)
 {
 	myPhysicalBody=a;
@@ -15,24 +24,80 @@ void Player::InitializePos(float x,float y, float z)
 
 void Player::draw()
 {
-	//todo: ko hieu access singleton th'e nay co' du'ng kieu ko. buoi!
-	//Renderer::GetInstance()->RenderNormalMapObject(myPhysicalBody);
+	//Render default physbody
+	RaptorEngine::GetInstance()->renderPhysicalBody(this->myPhysicalBody);
 }
 
-void Player::Update()
+void Player::Update(float dt)
 {
-	
+	this->deltaTime=dt;
 }
 void Player::UpdatePhysicalBody()
 {
 	//convert the board coord to actual PhysicalBody:
-
 }
 
 void Player::SetKeyBuffer( int* keyBuffer )
 {
 	keyPress=keyBuffer;
 }
+
+void Player::forward()
+{
+	//Decrease in local Z
+	velocity.set(0,0,-this->speed * deltaTime);
+	position+=velocity;
+
+	myPhysicalBody->translateAbsolute(position[0],position[1],position[2]);
+} 
+
+void Player::backward()
+{
+	//Increase in local Z
+	velocity.set(0,0,this->speed * deltaTime);
+	position+=velocity;
+
+	myPhysicalBody->translateAbsolute(position[0],position[1],position[2]);
+}
+
+void Player::strafeRight()
+{
+
+}
+
+void Player::strafeLeft()
+{
+
+}
+
+void Player::rotateX()
+{
+	angularVelocity.set(this->rotSpeed * deltaTime,0,0);
+	orientation+=angularVelocity;
+
+	myPhysicalBody->rotateX(orientation[0]);
+
+}
+
+void Player::rotateY()
+{
+	angularVelocity.set(0,this->rotSpeed * deltaTime,0);
+	orientation+=angularVelocity;
+
+	myPhysicalBody->rotateY(orientation[1]);
+}
+
+void Player::rotateZ()
+{
+
+}
+
+void Player::SetRotateSpeed( float rt )
+{
+	this->rotSpeed=rt;
+}
+
+
 
 
 
@@ -59,7 +124,7 @@ Dir PacMan::GetOppositeDirection(Dir d)
 	else if (d==ddown) return dup;
 }
 
-void PacMan::Update()
+void PacMan::Update(float dt)
 {
 	bool canMove=true;
 	//at center of cell:
@@ -77,5 +142,27 @@ void PacMan::Update()
 	//	myPhysicalBody->transform._orientation[1]=-1.57f;
 	//myPhysicalBody->Translate(cml::vector3f((GLfloat)velocity[0]/100.0,0.0,(GLfloat)velocity[1]/100.0));//offset, accumulate by adding to the exisinting
 
+
+}
+
+/////////////////////////////////////
+///////////////////////////////
+Monster::Monster()
+{
+
+}
+
+Monster::~Monster()
+{
+
+}
+
+Survivor::Survivor()
+{
+
+}
+
+Survivor::~Survivor()
+{
 
 }
