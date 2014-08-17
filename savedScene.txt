@@ -1,3 +1,0 @@
-table1 table.obj noise.jpg bench1.jpg  0.46 -0.790001 -0.53  0.1 0.1 0.1 1.2
-room room.obj noise.jpg yellow.jpg  0 1.44 -1.56  0.1 0.1 0.1 0
-bench1 bench1.obj noise.jpg bench1.jpg  -0.02 -0.510001 0.51  0.1 0.1 0.1 1.2
