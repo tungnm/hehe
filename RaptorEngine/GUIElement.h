@@ -5,7 +5,8 @@
 #include "glew.h"
 #include <unordered_map>
 using namespace std;
-
+namespace Raptor
+{
 
 //this is a single line of string on screen, with the position of the origin
 struct GUIElement
@@ -16,5 +17,5 @@ struct GUIElement
 	GLfloat Scale;
 	GLfloat condensedValue;
 };
-
+}
 #endif

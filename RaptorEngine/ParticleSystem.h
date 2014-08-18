@@ -5,7 +5,8 @@
 #include <vector>
 #include "glew.h"
 #include "cml\cml.h"
-
+namespace Raptor
+{
 enum particleSystemType{explosion, fire, smoke};
 
 const int FIRE_MAX_SIZE=1;
@@ -323,7 +324,7 @@ return true;
 
 	};
 
-
+	}
 
 
 #endif

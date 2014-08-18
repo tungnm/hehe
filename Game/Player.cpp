@@ -11,9 +11,9 @@ Player::Player()
 	this->orientation.zero();
 }
 
-void Player::SetPhysicalBody(PhysicalBody* a)
+void Player::SetPhysicalBody(Raptor::PhysicalBody* a)
 {
-	myPhysicalBody=a;
+	myPhysicalBody = a;
 }
 
 void Player::InitializePos(float x,float y, float z)
@@ -25,7 +25,7 @@ void Player::InitializePos(float x,float y, float z)
 void Player::draw()
 {
 	//Render default physbody
-	RaptorEngine::GetInstance()->renderPhysicalBody(this->myPhysicalBody);
+	Raptor::RaptorEngine::GetInstance()->renderPhysicalBody(this->myPhysicalBody);
 }
 
 void Player::Update(float dt)
@@ -156,10 +156,10 @@ void PacMan::Update(float dt)
 Monster::Monster()
 {
 	//REMEBER TO DLETE
-	PhysicalBody * box1 = new PhysicalBody();
+	Raptor::PhysicalBody * box1 = new Raptor::PhysicalBody();
 	box1->setMesh("unitBox.obj");
-	box1->setTexture(MapType::diffuse, "blue.jpg");
-	box1->setTexture(MapType::normal, "white.jpg");
+	box1->setTexture(Raptor::MapType::diffuse, "blue.jpg");
+	box1->setTexture(Raptor::MapType::normal, "white.jpg");
 	box1->translateAbsolute(4.0,0.0,-5.0);
 	box1->setScale(2.0,2.0,2.0);
 	this->SetPhysicalBody(box1);
@@ -177,10 +177,10 @@ void Monster::Update( float dt )
 
 Survivor::Survivor()
 {
-	PhysicalBody* playerBody = new PhysicalBody();
+	Raptor::PhysicalBody* playerBody = new Raptor::PhysicalBody();
 	playerBody->setMesh("ghost.obj");
-	playerBody->setTexture(MapType::diffuse, "pacman.png");
-	playerBody->setTexture(MapType::normal, "white.jpg");
+	playerBody->setTexture(Raptor::MapType::diffuse, "pacman.png");
+	playerBody->setTexture(Raptor::MapType::normal, "white.jpg");
 	playerBody->translateAbsolute(0.0,0.0,0.0);
 	playerBody->setScale(1.0,1.0,1.0);
 	this->SetPhysicalBody(playerBody);

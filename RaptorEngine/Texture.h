@@ -5,7 +5,8 @@
 #include <unordered_map>
 
 using namespace std;
-
+namespace Raptor
+{
 class TextureManager
 {
 	//Todo: right now texture object will not supposed to change in runtime, such as loading another image or texture object point to another c
@@ -39,5 +40,5 @@ public:
 
 	int ReserveTexture(); //used by FBO to get the next available texture
 };
-
+}
 #endif

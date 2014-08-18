@@ -2,7 +2,12 @@
 #include "PhysicalBodyImp.h"
 #include "Mesh.h"
 #include "Texture.h"
+
 #include "..\Game\DbgOut.h"
+
+
+namespace Raptor
+{
 
 void PhysicalBodyImp::UpdateModelMatrix()
 {
@@ -113,11 +118,19 @@ void PhysicalBodyImp::setMesh(std::string mymeshKey)
 {
 
 	meshKey=mymeshKey;
-	transform._position.set(0.0f,0.0f,0.0f);
-	transform._orientation.zero();
-	transform._scale=cml::vector3f(1.0,1.0,1.0);
+	//transform._position.set(0.0f,0.0f,0.0f);
+	//transform._orientation.zero();
+	//transform._scale=cml::vector3f(1.0,1.0,1.0);
+	this->_modelMatrix.identity();
+	
+	this->Translate(0,0,0);
+	this->RotateX(0);
+	this->RotateY(0);
+	this->RotateZ(0);
+	this->SetScale(1,1,1);
+
 	isNonMoving=false;
-	UpdateModelMatrix();	
+	//UpdateModelMatrix();	
 
 }
 
@@ -218,8 +231,10 @@ void PhysicalBody::rotateY( float angle )
 	mPhysicalBodyImp->RotateY(angle);
 }
 
+
 void PhysicalBody::translateLocalZ( float amount )
 {
 	mPhysicalBodyImp->TranslateLocalZ(amount);
 }
 
+}//End Name Space

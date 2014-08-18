@@ -2,6 +2,8 @@
 #include "Renderer.h"
 #include "Mesh.h"
 #include "Texture.h"
+namespace Raptor
+{
 class RaptorEngineImp
 {
 public:
@@ -216,3 +218,4 @@ void RaptorEngine::endRendering()
 	mEngineImp->endRendering();
 }
 ///////////////////////////////////////////////////////////////////////////////
+}

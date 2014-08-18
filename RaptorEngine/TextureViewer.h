@@ -3,6 +3,8 @@
 #include "glew.h"
 #include "cml\cml.h"
 #include "Mesh.h"
+namespace Raptor
+{
 class TextureViewer
 {//a texture viewer is a sub screen to see a texture. The size and position of the screen could be set by code
 //a texture viewer hold 
@@ -19,5 +21,5 @@ public:
 	void SetNewDimension(GLfloat x,GLfloat y, GLfloat scale);
 	
 };
-
+}
 #endif

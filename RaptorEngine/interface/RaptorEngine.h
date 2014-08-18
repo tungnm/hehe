@@ -2,6 +2,8 @@
 #define RAPTOR_ENGINE_H
 #include <string>
 #include "PhysicalBody.h"
+namespace Raptor
+{
 class RaptorEngineImp;
 /**
  * Singleton class as a main access to the game engine                                                            
@@ -66,6 +68,6 @@ public:
 private:
 	RaptorEngineImp* mEngineImp;
 };
-
+}
 
 #endif

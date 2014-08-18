@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "TextureViewer.h"
 #include "PhysicalBodyImp.h"
+namespace Raptor
+{
 //------------------------------------------HASH TABLE FOR TEXT RENDERING
 string alphabet[8]={"ABCDEFGH",
 					"IJKLMNOP",
@@ -740,4 +742,5 @@ void Renderer::InitFBOs()
 	_textureViewList["fullScreen"]=new TextureViewer(0.0f,0.0f,1.0f);//full screen
 	_textureViewList["lowerRight"]=new TextureViewer(0.5f,-0.5f,0.45f);//lower right viewer
 
+}
 }

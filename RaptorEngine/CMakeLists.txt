@@ -11,6 +11,8 @@ set (ENGINE_SOURCE
 	Mesh.h
 	ParticleSystem.h
 	PhysicalBodyImp.h
+	interface/PhysicalBody.h
+	interface/RaptorEngine.h
 	Renderer.h
 	rgbe.h
 	Shader.h

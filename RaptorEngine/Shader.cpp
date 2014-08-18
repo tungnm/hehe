@@ -1,6 +1,8 @@
 #include "Shader.h"
 
 using namespace std;
+namespace Raptor
+{
 //this function just read a file into char array and return
 char *textFileRead(const char* shaderFile) {
 
@@ -252,3 +254,4 @@ void ShaderPass::SendWorldSpaceTransformtoUni(cml::matrix44f_c* M,cml::matrix44f
 	SendMat3ToUni("normalTransform",Normal);//transformation of normal to 
 }
 
+}

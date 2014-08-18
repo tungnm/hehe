@@ -12,6 +12,8 @@
 #include <unordered_map>
 
 using namespace std;
+namespace Raptor
+{
 	//mesh: VAO handle, number of face
 	//MeshRenderData has the VAO ID and nFaces of the mesh, will be used for rendering
 	struct MeshRenderData
@@ -76,5 +78,5 @@ public:
 	bool IsMeshExist(string meshKey);
 
 };
-
+}
 #endif
