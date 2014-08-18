@@ -13,10 +13,11 @@ std::string objective;
 
 Scene * mainScene;
 
-Player player;
-Monster enemy;
 
-PhysicalBody* box1;
+Survivor *player;
+Monster *enemy;
+
+
 
 //free resource
 int pauseTimer;

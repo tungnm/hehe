@@ -45,10 +45,14 @@ void Player::SetKeyBuffer( int* keyBuffer )
 void Player::forward()
 {
 	//Decrease in local Z
+	cml::vector3f lasPos(position);
 	velocity.set(0,0,-this->speed * deltaTime);
 	position+=velocity;
 
-	myPhysicalBody->translateAbsolute(position[0],position[1],position[2]);
+	//myPhysicalBody->translateRelative(position);
+	//this->myPhysicalBody->translateRelative(velocity);
+	//this->myPhysicalBody->translateAbsolute(position[0],position[1],position[2]);
+	this->myPhysicalBody->translateLocalZ(-this->speed * deltaTime);
 } 
 
 void Player::backward()
@@ -57,7 +61,9 @@ void Player::backward()
 	velocity.set(0,0,this->speed * deltaTime);
 	position+=velocity;
 
-	myPhysicalBody->translateAbsolute(position[0],position[1],position[2]);
+	//myPhysicalBody->translateAbsolute(position[0],position[1],position[2]);
+	//this->myPhysicalBody->translateRelative(position);
+
 }
 
 void Player::strafeRight()
@@ -84,7 +90,7 @@ void Player::rotateY()
 	angularVelocity.set(0,this->rotSpeed * deltaTime,0);
 	orientation+=angularVelocity;
 
-	myPhysicalBody->rotateY(orientation[1]);
+	myPhysicalBody->rotateY(this->rotSpeed * deltaTime);
 }
 
 void Player::rotateZ()
@@ -149,17 +155,35 @@ void PacMan::Update(float dt)
 ///////////////////////////////
 Monster::Monster()
 {
-
+	//REMEBER TO DLETE
+	PhysicalBody * box1 = new PhysicalBody();
+	box1->setMesh("unitBox.obj");
+	box1->setTexture(MapType::diffuse, "blue.jpg");
+	box1->setTexture(MapType::normal, "white.jpg");
+	box1->translateAbsolute(4.0,0.0,-5.0);
+	box1->setScale(2.0,2.0,2.0);
+	this->SetPhysicalBody(box1);
 }
 
 Monster::~Monster()
 {
+	//SHOULD I DELETE its apperance. Who has the onwner ship
+}
 
+void Monster::Update( float dt )
+{
+	this->myPhysicalBody->rotateY(dt);
 }
 
 Survivor::Survivor()
 {
-
+	PhysicalBody* playerBody = new PhysicalBody();
+	playerBody->setMesh("ghost.obj");
+	playerBody->setTexture(MapType::diffuse, "pacman.png");
+	playerBody->setTexture(MapType::normal, "white.jpg");
+	playerBody->translateAbsolute(0.0,0.0,0.0);
+	playerBody->setScale(1.0,1.0,1.0);
+	this->SetPhysicalBody(playerBody);
 }
 
 Survivor::~Survivor()

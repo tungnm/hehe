@@ -54,10 +54,14 @@ class Monster : public Player
 public:
 	Monster();
 	~Monster();
+
+	void Update(float dt) override;
+
 };
 
 class Survivor: public Player
 {
+public:
 	Survivor();
 	~Survivor();
 };

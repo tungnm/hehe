@@ -91,4 +91,19 @@ void Scene::updateKeyBoard( int keys [])
 		this->player->SetSpeed(2.25f);
 		this->player->backward();
 	}
+
+
+
+	if (keys['i'])
+	{
+		this->player->SetSpeed(2.25f);
+		//this->player->();
+	}
+
+	if (keys['k'])
+	{
+		this->player->SetRotateSpeed(-2.25f);
+		this->player->SetSpeed(2.25f);
+		this->player->backward();
+	}
 }

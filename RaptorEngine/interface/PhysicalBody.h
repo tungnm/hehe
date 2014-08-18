@@ -35,6 +35,12 @@ public:
 	* Translate object in relative to the current position
 	*/
 	void translateRelative(cml::vector3f offset);
+	
+	/**
+	* Translate object along its LOCAL Z Axis 
+	*/
+	void translateLocalZ(float amount);
+	
 	/**
 	* Set scale for the object
 	*/
@@ -45,20 +51,19 @@ public:
 	void rotate(float angle);
 
 	/**
-	* Rotate the object along X axis
+	* Rotate the object along its LOCAL X axis
 	*/
 	void rotateX(float angle);
 
 	/**
-	* Rotate the object along Y axis
+	* Rotate the object along its LOCAL Y axis
 	*/
 	void rotateY(float angle);
 
 	/**
-	* Rotate the object along Z axis
+	* Rotate the object along its LOCAL Z axis
 	*/
 	void rotateZ(float angle);
-	
 	
 	//my real physical body, no one can see this except the lord of the raptors
 	PhysicalBodyImp* mPhysicalBodyImp;

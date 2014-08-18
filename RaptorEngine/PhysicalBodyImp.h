@@ -25,6 +25,9 @@ struct Transformation
 class PhysicalBodyImp
 {
 private:
+	cml::matrix44f_c tM;
+	cml::matrix44f_c rM;
+
 	//std::string _name;
 	cml::matrix44f_c _modelMatrix;
 	//bool _flipSide;
@@ -48,7 +51,12 @@ public:
 		transform._position.set(0.0f,0.0f,0.0f);
 		transform._orientation=cml::vector3f(0.0f,0.0f,0.0f);
 		transform._scale=cml::vector3f(1.0,1.0,1.0);
+		tM.identity();
+		rM.identity();
+
+		_modelMatrix.identity();
 		UpdateModelMatrix();	
+
 	}
 	void SetTexture(MapType type, std::string textureKey);
 	void SetColor(GLfloat r, GLfloat g, GLfloat b){_material.color=cml::vector3f(r,g,b);}
@@ -62,6 +70,7 @@ public:
 	PhysicalBodyImp(std::string meshKey);
 	void Translate(GLfloat x,GLfloat y,GLfloat z);
 	void Translate(cml::vector3f offset);
+	void TranslateLocalZ(float amount);
 	void SetScale(GLfloat scaleX,GLfloat scaleY,GLfloat scaleZ);
 	cml::matrix44f_c GetModelMatrix();
 	void Rotate(float angle);

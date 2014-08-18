@@ -20,60 +20,9 @@ void Close()
 }
 void UpdateKeyboard()
 {
-	//long current=glutGet(GLUT_ELAPSED_TIME);
-
-	//mainScene->updateKeyBoard(keysPressed);
-
-	//if (keysPressed['a'])
-	//{
-	//	gEngine->StrafeCamRight((current-lastTick)*CAMERA_MOVEMENT_SPEED);
-	//}
-	//else if (keysPressed['d'])
-	//{
-	//	gEngine->StrafeCamLeft((current-lastTick)*CAMERA_MOVEMENT_SPEED);
-	//}
-	//
-	//if (keysPressed['w'])
-	//{
-	//	gEngine->MoveCamForward((current-lastTick)*CAMERA_MOVEMENT_SPEED);
-	////	gEngine->lightPos[1]+=0.2f;
-	//}
-	//else if (keysPressed['s'])
-	//{
-	//	//gEngine->lightPos[1]-=0.2f;
-	//	gEngine->MoveCamBackward((current-lastTick)*CAMERA_MOVEMENT_SPEED);
-	//}
-
-	// if (keysPressed['c'])//&&current-lastFunctionClick>700)
-	//{//gEngine->lightPos[1]+=0.9f;
-	//
-	//	/*gEngine->ToggleSSAO();
-	//	lastFunctionClick=current;*/
-	//}
-	//  if (keysPressed['b'])//&&current-lastFunctionClick>700)
-	//{
-	//	//gEngine->lightPos[1]-=0.9f;
-	//	
-	//	/*gEngine->ToggleBloom();
-	//	lastFunctionClick=current;*/
-	//}
-	//if (keysPressed['p']&&current-lastFunctionClick>700)
-	//{
-	//	dInfo()<<gEngine->GetCameraPos();
-	//	lastFunctionClick=current;
-	//}
-
-	//if (keysPressed[27]&&current-lastFunctionClick>700)	//press escape button: quit program
-	//{
-	//	Close();
-	//	exit(0);
-	//}
-
-	//lastTick=current;
 
 	mainScene->updateKeyBoard(keysPressed);
 }
-
 
 void init(void)
 {	
@@ -96,30 +45,17 @@ void init(void)
 	gEngine->setLightPos(-5.0, 5.0,0.0);
 	
 	
-	PhysicalBody* playerBody = new PhysicalBody();
-	playerBody->setMesh("ghost.obj");
-	playerBody->setTexture(MapType::diffuse, "pacman.png");
-	playerBody->setTexture(MapType::normal, "white.jpg");
-	playerBody->translateAbsolute(0.0,0.0,0.0);
-	playerBody->setScale(1.0,1.0,1.0);
-	player.SetPhysicalBody(playerBody);
-	mainScene = Scene::buildScene(&player);
+	player = new Survivor();
+	mainScene = Scene::buildScene(player);
 
 
 	//todo: 2 cai' boxes nay chi la PhysicalBody, ve sau no' se nam trong monster class, hay gi do...
-	box1 = new PhysicalBody();
-	box1->setMesh("unitBox.obj");
-	box1->setTexture(MapType::diffuse, "blue.jpg");
-	box1->setTexture(MapType::normal, "white.jpg");
-	box1->translateAbsolute(4.0,0.0,0.0);
-	box1->setScale(1.0,1.0,1.0);
-
-	enemy.SetPhysicalBody(box1);
-
-	mainScene->add(&enemy);
+	enemy=new Monster();
+	
+	mainScene->add(enemy);
 
 	//deo hieu ca'i nay de lam gi, cha'c xem sau
-	player.SetKeyBuffer(keysPressed); 
+	//player.SetKeyBuffer(keysPressed); 
 }
 
 void display()
@@ -128,13 +64,7 @@ void display()
 
 	gEngine->beginRendering();
 
-	//todo: cho het nhung ca'i draw() nay vao trong scene->draw(), hay gi do'...
-	//player1.draw();
 	mainScene->draw();
-	
-	//todo: day chi la 2 ca'i test boxes, ve sau no' se thuoc vao` monster.draw()
-	gEngine->renderPhysicalBody(box1);
-	//gEngine->RenderNormalMapObject(box2);
 
 	gEngine->endRendering();
 	glutSwapBuffers();
