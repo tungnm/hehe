@@ -1,7 +1,7 @@
 #include "RaptorEngine.h"
 #include "PhysicalBody.h"
 #include "Player.h"
-
+#include "RaptorEngine.h"
 
 Player::Player()
 {
@@ -11,9 +11,9 @@ Player::Player()
 	this->orientation.zero();
 }
 
-void Player::SetPhysicalBody(PhysicalBody* a)
+void Player::SetPhysicalBody(Raptor::PhysicalBody* a)
 {
-	myPhysicalBody=a;
+	myPhysicalBody = a;
 }
 
 void Player::InitializePos(float x,float y, float z)
@@ -25,7 +25,7 @@ void Player::InitializePos(float x,float y, float z)
 void Player::draw()
 {
 	//Render default physbody
-	RaptorEngine::GetInstance()->renderPhysicalBody(this->myPhysicalBody);
+	Raptor::RaptorEngine::GetInstance()->renderPhysicalBody(this->myPhysicalBody);
 }
 
 void Player::Update(float dt)

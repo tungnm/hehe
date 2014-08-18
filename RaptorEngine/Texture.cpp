@@ -7,7 +7,8 @@
 #include <string.h>
 
 using namespace std;
-
+namespace Raptor
+{
 void TextureManager::StartUp()
 {
 	_count=0;
@@ -122,4 +123,5 @@ int TextureManager::ReserveTexture()
 	_count++;
 	return _count;
 
+}
 }

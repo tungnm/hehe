@@ -2,6 +2,8 @@
 #define FBO_H
 #include "glew.h"
 #include "Texture.h"
+namespace Raptor
+{
 class FBO
 {
 //a frame buffer object class hold a fboHandle for setting itself as current FBO using function SetAtive()
@@ -109,6 +111,6 @@ public:
 	glDeleteFramebuffers(1,&_fboHandle);
 	}
 };
-
+}
 
 #endif

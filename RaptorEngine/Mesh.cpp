@@ -3,7 +3,8 @@
 #include "UtilityFunctions.h"
 
 using namespace std;
-
+namespace Raptor
+{
 //this template function is how to convert a string into any numeric type:
 Assimp::Importer importer;
 
@@ -195,4 +196,5 @@ void MeshManager::ShutDown()
 
 	}
 	cout<<"Done\n";
+}
 }

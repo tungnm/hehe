@@ -2,7 +2,8 @@
 #include "Texture.h"
 
 
-
+namespace Raptor
+{
 GLuint ShadowFBO::GetTextureHandle()
 {
 	return _textureHandle;
@@ -281,3 +282,4 @@ void FBO::Dellocate()
 }
 
 
+}

@@ -1,6 +1,7 @@
 #ifndef U_INPUT1
 #define U_INPUT1
-
+namespace Raptor
+{
 //=====================USER INPUT FUNCTIONS
 	int keysPressed[255];
 	//displacement of mouse since last mouse update
@@ -34,6 +35,6 @@
 	}
 //=========================================
 
-
+}
 
 #endif

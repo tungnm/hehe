@@ -2,7 +2,8 @@
 #include "PhysicalBodyImp.h"
 #include "Mesh.h"
 #include "Texture.h"
-
+namespace Raptor
+{
 void PhysicalBodyImp::UpdateModelMatrix()
 {
 	_modelMatrix.identity();
@@ -166,3 +167,4 @@ void PhysicalBody::rotateY( float angle )
 	mPhysicalBodyImp->RotateY(angle);
 }
 
+}

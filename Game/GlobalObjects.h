@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include <string>
 
-RaptorEngine * gEngine;
+Raptor::RaptorEngine * gEngine;
 long lastTick=0;
 long lastFunctionClick=0;
 std::string objective;
@@ -16,8 +16,9 @@ Scene * mainScene;
 Player player;
 Monster enemy;
 
-PhysicalBody* box1;
-
+Raptor::PhysicalBody* xAxis;
+Raptor::PhysicalBody* yAxis;
+Raptor::PhysicalBody* zAxis;
 //free resource
 int pauseTimer;
 bool isPause;

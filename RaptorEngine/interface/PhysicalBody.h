@@ -2,7 +2,8 @@
 #define PHYSICAL_BODY_H
 #include "glew.h"
 #include "cml\cml.h"
-
+namespace Raptor
+{
 class PhysicalBodyImp;
 enum MapType{diffuse,normal, height, specular, count};
 /**
@@ -63,4 +64,5 @@ public:
 	//my real physical body, no one can see this except the lord of the raptors
 	PhysicalBodyImp* mPhysicalBodyImp;
 };
+}
 #endif

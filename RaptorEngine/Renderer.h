@@ -19,7 +19,8 @@
 #include "Constant.h"
 #include "freeglut.h"
 using namespace std;
-
+namespace Raptor
+{
 class Renderer
 {
 private:
@@ -200,5 +201,5 @@ public:
 };
 
 
-
+}
 #endif

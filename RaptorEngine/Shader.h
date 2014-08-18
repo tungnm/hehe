@@ -8,7 +8,8 @@
 #include "cml\cml.h"
 
 using namespace std;
-
+namespace Raptor
+{
 class ShaderPass
 {
 public:
@@ -49,6 +50,6 @@ private:
 
 //this function create shader object, load shader source and compile a shader for vert and frag shader
 
-
+}
 
 #endif

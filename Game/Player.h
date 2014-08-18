@@ -3,15 +3,15 @@
 
 #include "cml\cml.h"
 //#include "DbgOut.h"
-
-class PhysicalBody;
+#include "PhysicalBody.h"
+class Raptor::PhysicalBody;
 
 typedef enum{dleft, dright, dup, ddown, upleft, upright, downleft, downright} Dir;
 
 class Player
 {
 protected:
-	PhysicalBody* myPhysicalBody;
+	Raptor::PhysicalBody* myPhysicalBody;
 	int speed;
 	int* keyPress;
 	virtual void UpdatePhysicalBody();
@@ -29,7 +29,7 @@ public:
 	virtual void draw();
 
 	void InitializePos(float x,float y, float z);
-	void SetPhysicalBody(PhysicalBody* a);
+	void SetPhysicalBody(Raptor::PhysicalBody* a);
 	void SetSpeed(int s){speed=s;}
 	
 	virtual void Update(float dt);

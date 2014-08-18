@@ -79,7 +79,7 @@ void init(void)
 {	
 	
 	//initialize render
-	gEngine=RaptorEngine::GetInstance();
+	gEngine = Raptor::RaptorEngine::GetInstance();
 	//Setup renderer
 	gEngine->startUp();
 	
@@ -89,6 +89,7 @@ void init(void)
 	gEngine->loadTexture("pacman.png");
 	gEngine->loadTexture("white.jpg");
 	gEngine->loadTexture("blue.jpg");
+	gEngine->loadTexture("red.jpg");
 	
 	//Set the world camerea
 	gEngine->setUpCameraAbsolute(cml::vector3f(10.0,10.0,20.0), cml::vector3f(0.0,0.0,0.0));
@@ -96,27 +97,40 @@ void init(void)
 	gEngine->setLightPos(-5.0, 5.0,0.0);
 	
 	
-	PhysicalBody* playerBody = new PhysicalBody();
+	Raptor::PhysicalBody* playerBody = new Raptor::PhysicalBody();
 	playerBody->setMesh("ghost.obj");
-	playerBody->setTexture(MapType::diffuse, "pacman.png");
-	playerBody->setTexture(MapType::normal, "white.jpg");
+	playerBody->setTexture(Raptor::MapType::diffuse, "pacman.png");
+	playerBody->setTexture(Raptor::MapType::normal, "white.jpg");
 	playerBody->translateAbsolute(0.0,0.0,0.0);
 	playerBody->setScale(1.0,1.0,1.0);
 	player.SetPhysicalBody(playerBody);
 	mainScene = Scene::buildScene(&player);
 
 
-	//todo: 2 cai' boxes nay chi la PhysicalBody, ve sau no' se nam trong monster class, hay gi do...
-	box1 = new PhysicalBody();
-	box1->setMesh("unitBox.obj");
-	box1->setTexture(MapType::diffuse, "blue.jpg");
-	box1->setTexture(MapType::normal, "white.jpg");
-	box1->translateAbsolute(4.0,0.0,0.0);
-	box1->setScale(1.0,1.0,1.0);
+	xAxis = new Raptor::PhysicalBody();
+	xAxis->setMesh("unitBox.obj");
+	xAxis->setTexture(Raptor::MapType::diffuse, "wally.jpg");
+	xAxis->setTexture(Raptor::MapType::normal, "white.jpg");
+	xAxis->translateAbsolute(2.5,0.0,0.0);
+	xAxis->setScale(5.0,0.1,0.1); 
 
-	enemy.SetPhysicalBody(box1);
+	yAxis = new Raptor::PhysicalBody();
+	yAxis->setMesh("unitBox.obj");
+	yAxis->setTexture(Raptor::MapType::diffuse, "red.jpg");
+	yAxis->setTexture(Raptor::MapType::normal, "white.jpg");
+	yAxis->setScale(0.1,5.0,0.1); 
+	yAxis->translateAbsolute(0.0,0.0,0.0);
+	
+	zAxis = new Raptor::PhysicalBody();
+	zAxis->setMesh("unitBox.obj");
+	zAxis->setTexture(Raptor::MapType::diffuse, "red.jpg");
+	zAxis->setTexture(Raptor::MapType::normal, "white.jpg");
+	zAxis->setScale(0.1,0.1,5.0); 
+	zAxis->translateAbsolute(0.0,0.0,2.5);
 
-	mainScene->add(&enemy);
+	//enemy.SetPhysicalBody(origin);
+
+	//mainScene->add(&enemy);
 
 	//deo hieu ca'i nay de lam gi, cha'c xem sau
 	player.SetKeyBuffer(keysPressed); 
@@ -133,7 +147,9 @@ void display()
 	mainScene->draw();
 	
 	//todo: day chi la 2 ca'i test boxes, ve sau no' se thuoc vao` monster.draw()
-	gEngine->renderPhysicalBody(box1);
+	gEngine->renderPhysicalBody(xAxis);
+	gEngine->renderPhysicalBody(yAxis);
+	gEngine->renderPhysicalBody(zAxis);
 	//gEngine->RenderNormalMapObject(box2);
 
 	gEngine->endRendering();

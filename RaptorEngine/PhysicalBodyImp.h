@@ -1,6 +1,10 @@
 
 #include "cml\cml.h"
 //forward declaration
+
+namespace Raptor
+{
+
 class Mesh;
 class Texture;
 
@@ -75,3 +79,5 @@ public:
 
 
 };
+
+}
