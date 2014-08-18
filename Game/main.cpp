@@ -38,12 +38,33 @@ void init(void)
 	gEngine->loadTexture("pacman.png");
 	gEngine->loadTexture("white.jpg");
 	gEngine->loadTexture("blue.jpg");
+	gEngine->loadTexture("red.jpg");
 	
 	//Set the world camerea
 	gEngine->setUpCameraAbsolute(cml::vector3f(10.0,10.0,20.0), cml::vector3f(0.0,0.0,0.0));
 	gEngine->setLightTarget(0.0,0.5,0.0);
 	gEngine->setLightPos(-5.0, 5.0,0.0);
-	
+
+	xAxis = new Raptor::PhysicalBody();
+	xAxis->setMesh("unitBox.obj");
+	xAxis->setTexture(Raptor::MapType::diffuse, "wally.jpg");
+	xAxis->setTexture(Raptor::MapType::normal, "white.jpg");
+	xAxis->translateAbsolute(2.5,0.0,0.0);
+	xAxis->setScale(5.0,0.1,0.1); 
+
+	yAxis = new Raptor::PhysicalBody();
+	yAxis->setMesh("unitBox.obj");
+	yAxis->setTexture(Raptor::MapType::diffuse, "red.jpg");
+	yAxis->setTexture(Raptor::MapType::normal, "white.jpg");
+	yAxis->setScale(0.1,5.0,0.1); 
+	yAxis->translateAbsolute(0.0,0.0,0.0);
+
+	zAxis = new Raptor::PhysicalBody();
+	zAxis->setMesh("unitBox.obj");
+	zAxis->setTexture(Raptor::MapType::diffuse, "red.jpg");
+	zAxis->setTexture(Raptor::MapType::normal, "white.jpg");
+	zAxis->setScale(0.1,0.1,5.0); 
+	zAxis->translateAbsolute(0.0,0.0,2.5);
 	
 	player = new Survivor();
 	mainScene = Scene::buildScene(player);
@@ -65,7 +86,9 @@ void display()
 	gEngine->beginRendering();
 
 	mainScene->draw();
-
+	gEngine->renderPhysicalBody(xAxis);
+	gEngine->renderPhysicalBody(yAxis);
+	gEngine->renderPhysicalBody(zAxis);
 	gEngine->endRendering();
 	glutSwapBuffers();
 

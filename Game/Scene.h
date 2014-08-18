@@ -38,6 +38,10 @@ class Scene //Should be converted into abstract or base Scene. It's ok for now.
 		Scene *next;
 		Scene *prev;
 
+		/*Raptor::PhysicalBody:: *xAxis;
+		Raptor::PhysicalBody:: *yAxis;
+		Raptor::PhysicalBody:: *zAxis;
+*/
 		
 };
 

@@ -16,6 +16,11 @@ Scene * mainScene;
 
 Survivor *player;
 Monster *enemy;
+
+Raptor::PhysicalBody *xAxis;
+Raptor::PhysicalBody *yAxis;
+Raptor::PhysicalBody *zAxis;
+
 //free resource
 int pauseTimer;
 bool isPause;
