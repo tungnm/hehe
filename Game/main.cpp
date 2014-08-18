@@ -28,7 +28,7 @@ void init(void)
 {	
 	
 	//initialize render
-	gEngine=RaptorEngine::GetInstance();
+	gEngine=Raptor::RaptorEngine::GetInstance();
 	//Setup renderer
 	gEngine->startUp();
 	
